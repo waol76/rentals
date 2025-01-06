@@ -261,7 +261,7 @@ const calendarData = chartData.reduce((data: Array<{ date: Date; nights: number 
                return (
                  <Cell
                    key={`cell-${index}`}
-                   fill={`rgba(255,115,0,${entry.occupancyRate / 100})`}
+                   fill={`rgba(255,115,0,${(entry.occupancyRate ?? 0) / 100})`}
                    label={roundedNights > 0 ? roundedNights : ''}
                  />
                );
