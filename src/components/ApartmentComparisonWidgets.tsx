@@ -279,7 +279,7 @@ const comparisonData = [
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="month" />
                 <YAxis />
-                <Tooltip formatter={(value) => `€${Math.round(value).toLocaleString()}`} />
+                <Tooltip formatter={(value: number) => `€${Math.round(Number(value)).toLocaleString()}`} />
                 <Legend />
                 <Bar dataKey="Lovely" fill={LOVELY_COLOR} />
                 <Bar dataKey="Relaxing" fill={RELAXING_COLOR} />
