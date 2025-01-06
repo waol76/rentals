@@ -30,6 +30,16 @@ interface DateRow {
   year: string;
 }
 
+interface RentalData extends DateRow {
+  gross: number;
+  net: number;
+  nights: number;
+}
+
+interface DataStructure {
+  [key: string]: RentalData[];
+}
+
 interface StatsCardProps {
   icon: React.ElementType;
   title: string;
@@ -123,7 +133,7 @@ const StatsCard: React.FC<StatsCardProps> = ({ icon: Icon, title, value, subtitl
 };
 
 const RentalDashboard = () => {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<DataStructure | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState('both');
@@ -149,12 +159,12 @@ const RentalDashboard = () => {
   if (loading) return <div className="p-6 text-center">Loading...</div>;
   if (error) return <div className="p-6 text-center text-red-500">Error: {error}</div>;
   if (!data) return <div className="p-6 text-center">No data available</div>;
-  const availableYears = [...new Set(
-    Object.values(data)
-      .flat()
-      .map(row => row.year)
-      .filter(Boolean)
-  )].sort();
+const availableYears = [...new Set(
+  Object.values(data)
+    .flat()
+    .map((row: RentalData) => row.year)
+    .filter(Boolean)
+)].sort();
 
   const filteredByApartment = viewMode === 'both'
     ? data
