@@ -59,7 +59,7 @@ const getDateFromRow = (row: DateRow): Date => {
 };
 
 const StatsCard: React.FC<StatsCardProps> = ({ icon: Icon, title, value, subtitle, secondaryValue, trend, period = 'This period', info }) => {
-  const trendValue = parseFloat(trend);
+  const trendValue = trend ? parseFloat(trend) : 0;
   
   return (
     <Card className="bg-white">
