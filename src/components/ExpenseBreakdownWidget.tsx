@@ -12,6 +12,14 @@ interface ExpenseCategories {
  extra: number;
 }
 
+
+interface Expense {
+  name: string;
+  value: number;
+}
+
+
+
 const ExpenseBreakdownWidget = ({ data }: { data: Record<string, any[]> }) => {
  const COLORS = ['#4ade80', '#f87171', '#60a5fa', '#fbbf24', '#a78bfa', '#34d399', '#fb923c', '#f472b6'];
 
@@ -62,13 +70,13 @@ const calculateFinancials = () => {
    { name: 'Total Expenses', value: totalExpenses }
  ].filter(item => item.value > 0);
 
- const expenseBreakdownData = Object.entries(expenses)
-   .filter(([key]) => key !== 'grossIncome')
-   .map(([name, value]) => ({
-     name: name.charAt(0).toUpperCase() + name.slice(1),
-     value
-   }))
-   .filter(item => item.value > 0);
+const expenseBreakdownData: Expense[] = Object.entries(expenses)
+  .filter(([key]) => key !== 'grossIncome')
+  .map(([name, value]) => ({
+    name: name.charAt(0).toUpperCase() + name.slice(1),
+    value: value as number
+  }))
+  .filter((item: Expense) => item.value > 0);
 
  const formatTooltip = (value: number) => `€${Math.round(value).toLocaleString()}`;
  const customLabel = ({ percent }: { percent: number }) => `${(percent * 100).toFixed(0)}%`;
