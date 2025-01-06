@@ -28,6 +28,22 @@ interface ProcessedDataEntry {
   };
 }
 
+
+interface MonthMapEntry {
+  month: string;
+  monthSort: string;
+  gross: number;
+  net: number;
+  nights: number;
+  daysInMonth: number;
+  _type: {
+    gross: string;
+    net: string;
+    nights: string;
+  };
+}
+
+
 const GrossNetIncomeWidget = ({ data }: { data: Record<string, RowData[]> }) => {
   const [view, setView] = useState('monthly');
 
@@ -36,28 +52,28 @@ const processData = (): ProcessedDataEntry[] => {
     
     if (view === 'monthly') {
       // Create a map to combine data for the same month-year
-      const monthMap = rawData.reduce((acc, row) => {
-        const key = `${row.year}-${String(row.month).padStart(2, '0')}`;
-        if (!acc[key]) {
-          acc[key] = {
-            month: `${row.month} ${row.year}`,
-            monthSort: key, // Add sort key
-            gross: 0,
-            net: 0,
-            nights: 0,
-            daysInMonth: getDaysInMonth(parse(key, 'yyyy-MM', new Date())),
-            _type: {
-              gross: 'currency',
-              net: 'currency',
-              nights: 'number'
-            }
-          };
-        }
-        acc[key].gross += Number(row.gross) || 0;
-        acc[key].net += Number(row.net) || 0;
-        acc[key].nights += Number(row.nights) || 0;
-        return acc;
-      }, {});
+const monthMap = rawData.reduce((acc: Record<string, MonthMapEntry>, row) => {
+  const key = `${row.year}-${String(row.month).padStart(2, '0')}`;
+  if (!acc[key]) {
+    acc[key] = {
+      month: `${row.month} ${row.year}`,
+      monthSort: key,
+      gross: 0,
+      net: 0,
+      nights: 0,
+      daysInMonth: getDaysInMonth(parse(key, 'yyyy-MM', new Date())),
+      _type: {
+        gross: 'currency',
+        net: 'currency',
+        nights: 'number'
+      }
+    };
+  }
+  acc[key].gross += Number(row.gross) || 0;
+  acc[key].net += Number(row.net) || 0;
+  acc[key].nights += Number(row.nights) || 0;
+  return acc;
+}, {} as Record<string, MonthMapEntry>);
 
       // Convert map to array and sort by date
       return Object.values(monthMap)
