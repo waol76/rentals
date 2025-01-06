@@ -1,31 +1,42 @@
 'use client';
-
 import React, { useEffect, useState } from 'react';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 
-const RawDataTable = () => {
-  const [data, setData] = useState(null);
+interface TableData {
+  [key: string]: Array<Record<string, any>>;
+}
+
+interface SortConfig {
+  key: string | null;
+  direction: 'asc' | 'desc';
+}
+
+const RawDataTable: React.FC = () => {
+  const [data, setData] = useState<TableData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [selectedTab, setSelectedTab] = useState(null);
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+  const [error, setError] = useState<string | null>(null);
+  const [selectedTab, setSelectedTab] = useState<string | null>(null);
+  const [sortConfig, setSortConfig] = useState<SortConfig>({ key: null, direction: 'asc' });
+
+  // Rest of your component code...
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('/api/sheets');
-        if (!response.ok) throw new Error(`Failed to fetch data: ${response.statusText}`);
-        const { data } = await response.json();
+const fetchData = async () => {
+  try {
+    const response = await fetch('/api/sheets');
+    if (!response.ok) throw new Error(`Failed to fetch data: ${response.statusText}`);
+    const { data }: ApiResponse = await response.json();
 
-        console.log('API Response Data:', data);
-        setData(data);
-        setSelectedTab(Object.keys(data)[0]);
-      } catch (err) {
-        setError('Failed to fetch data from Google Sheets.');
-      } finally {
-        setLoading(false);
-      }
-    };
+    setData(data);
+    if (Object.keys(data).length > 0) {
+      setSelectedTab(Object.keys(data)[0]);
+    }
+  } catch (err) {
+    setError('Failed to fetch data from Google Sheets.');
+  } finally {
+    setLoading(false);
+  }
+};
     fetchData();
   }, []);
 
