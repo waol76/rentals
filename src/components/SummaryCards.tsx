@@ -5,7 +5,12 @@ import { Euro, Bed, TrendingUp, BarChart } from 'lucide-react';
 const formatCurrency = (value: number) => 
   new Intl.NumberFormat('en-US', { style: 'currency', currency: 'EUR' }).format(value);
 
-const SummaryCard = ({ title, value, change, icon: Icon }) => (
+const SummaryCard = ({ title, value, change, icon: Icon }: {
+  title: string;
+  value: string;
+  change?: number;
+  icon: IconType;
+}) => (
   <div className="bg-white rounded-lg shadow p-4 border">
     <div className="flex justify-between">
       <div>
