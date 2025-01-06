@@ -166,28 +166,28 @@ const availableYears = [...new Set(
     .filter(Boolean)
 )].sort();
 
-  const filteredByApartment = viewMode === 'both'
-    ? data
-    : {
-        [`Nuno Gomez Piano ${viewMode === 'Lovely' ? 'uno - Lovely' : 'terra - Relaxing'}`]: 
-          data?.[`Nuno Gomez Piano ${viewMode === 'Lovely' ? 'uno - Lovely' : 'terra - Relaxing'}`] || []
-      };
+  const filteredByApartment: DataStructure = viewMode === 'both'
+  ? data
+  : {
+      [`Nuno Gomez Piano ${viewMode === 'Lovely' ? 'uno - Lovely' : 'terra - Relaxing'}`]: 
+        data?.[`Nuno Gomez Piano ${viewMode === 'Lovely' ? 'uno - Lovely' : 'terra - Relaxing'}`] || []
+    };
 
-  const filteredData = selectedYear === 'all' 
-    ? filteredByApartment
-    : {
-        ...filteredByApartment,
-        ...Object.fromEntries(
-          Object.entries(filteredByApartment).map(([key, rows]) => [
-            key,
-            rows.filter(row => row.year === selectedYear)
-          ])
-        )
-      };
+const filteredData: DataStructure = selectedYear === 'all' 
+  ? filteredByApartment
+  : {
+      ...filteredByApartment,
+      ...Object.fromEntries(
+        Object.entries(filteredByApartment).map(([key, rows]) => [
+          key,
+          rows.filter((row: RentalData) => row.year === selectedYear)
+        ])
+      )
+    };
 
-  const processedData = Object.values(filteredData).flat().filter(row => row && typeof row === 'object');
+  const processedData: RentalData[] = Object.values(filteredData).flat().filter((row): row is RentalData => row && typeof row === 'object');
 
-  const calculateOccupancy = (data) => {
+  const calculateOccupancy = (data: RentalData[]) => {
     if (!data.length) return 0;
 
     // Get unique year-month combinations
@@ -215,8 +215,8 @@ const availableYears = [...new Set(
     return totalAvailableDays > 0 ? (totalNightsBooked / totalAvailableDays) * 100 : 0;
   };
 
-  const calculateTrends = (currentData, previousData) => {
-    const calculatePeriodMetrics = (data) => {
+  const calculateTrends = (currentData: RentalData[], previousData: RentalData[]) => {
+    const calculatePeriodMetrics = (data: RentalData[]) => {
       if (!data.length) return null;
       
       return {
@@ -268,7 +268,21 @@ const availableYears = [...new Set(
     };
   };
 
-  const calculateKPIs = () => {
+  const calculateKPIs = (): {
+  totalGross: number;
+  occupancyRate: number;
+  avgNightlyRate: number;
+  totalNights: number;
+  netIncome: number;
+  trends: {
+    revenue: number;
+    nights: number;
+    occupancy: number;
+    nightly: number;
+    netIncome: number;
+  };
+  trendPeriod: string;
+} => {
     const totalGross = processedData.reduce((sum, row) => sum + (Number(row.gross) || 0), 0);
     const totalNights = processedData.reduce((sum, row) => sum + (Number(row.nights) || 0), 0);
     const occupancyRate = calculateOccupancy(processedData);
