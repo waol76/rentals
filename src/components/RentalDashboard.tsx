@@ -125,7 +125,7 @@ const StatsCard: React.FC<StatsCardProps> = ({ icon: Icon, title, value, subtitl
 const RentalDashboard = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState('both');
   const [selectedYear, setSelectedYear] = useState('all');
 
