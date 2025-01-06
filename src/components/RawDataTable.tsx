@@ -11,6 +11,10 @@ interface SortConfig {
   direction: 'asc' | 'desc';
 }
 
+interface ApiResponse {
+  data: TableData;
+}
+
 const RawDataTable: React.FC = () => {
   const [data, setData] = useState<TableData | null>(null);
   const [loading, setLoading] = useState(true);
