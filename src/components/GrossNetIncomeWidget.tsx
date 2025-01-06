@@ -2,6 +2,16 @@ import React, { useState } from 'react';
 import { AreaChart, Area, Bar, BarChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 import { format, parse, getYear, getMonth, getDaysInMonth } from 'date-fns';
 
+
+interface RowData {
+  year: number;
+  month: number;
+  gross: number | string;
+  net: number | string;
+  nights: number | string;
+  [key: string]: any;
+}
+
 const GrossNetIncomeWidget = ({ data }) => {
   const [view, setView] = useState('monthly');
 
