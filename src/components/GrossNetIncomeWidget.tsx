@@ -130,32 +130,32 @@ const GrossNetIncomeWidget = ({ data }: { data: Record<string, RowData[]> }) => 
  const chartData = processData();
 
  const calendarData = chartData.reduce((data, entry) => {
-   if (view === 'monthly') {
-     const month = parse(entry.month, 'MMMM yyyy', new Date());
-     const numDays = getDaysInMonth(month);
+  if (view === 'monthly' && entry.month) {
+    const month = parse(entry.month, 'MMMM yyyy', new Date());
+    const numDays = getDaysInMonth(month);
 
-     for (let day = 1; day <= numDays; day++) {
-       const date = new Date(getYear(month), getMonth(month), day);
-       data.push({
-         date,
-         nights: Math.round(entry.nights / numDays),
-       });
-     }
-   } else {
-     const year = Number(entry.year);
-     for (let month = 0; month < 12; month++) {
-       const numDays = getDaysInMonth(new Date(year, month));
-       for (let day = 1; day <= numDays; day++) {
-         const date = new Date(year, month, day);
-         data.push({
-           date,
-           nights: Math.round(entry.nights / (12 * numDays)),
-         });
-       }
-     }
-   }
-   return data;
- }, []);
+    for (let day = 1; day <= numDays; day++) {
+      const date = new Date(getYear(month), getMonth(month), day);
+      data.push({
+        date,
+        nights: Math.round(entry.nights / numDays),
+      });
+    }
+  } else if (view === 'yearly' && entry.year !== undefined) {
+    const year = Number(entry.year);
+    for (let month = 0; month < 12; month++) {
+      const numDays = getDaysInMonth(new Date(year, month));
+      for (let day = 1; day <= numDays; day++) {
+        const date = new Date(year, month, day);
+        data.push({
+          date,
+          nights: Math.round(entry.nights / (12 * numDays)),
+        });
+      }
+    }
+  }
+  return data;
+}, []);
 
  const CustomTooltip = ({ 
    active, 
