@@ -39,13 +39,13 @@ interface ValueObject {
 
 interface DateRow {
   month: MonthName;
-  year: string;
+  year: number;  // Changed from string to number
 }
 
 interface RentalData extends DateRow {
-  gross: number;
-  net: number;
-  nights: number;
+  gross: number | string;
+  net: number | string;
+  nights: number | string;
 }
 
 interface DataStructure {
