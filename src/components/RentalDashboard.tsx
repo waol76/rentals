@@ -23,7 +23,7 @@ import IncomeExpenseTable from '@/components/IncomeExpenseTable';
 import ApartmentComparisonWidgets from '@/components/ApartmentComparisonWidgets';
 
 // Helper function to convert month name to number (moved outside components for reuse)
-const monthNameToNumber = (monthName) => {
+const monthNameToNumber = (monthName: string): number => {
   const months = {
     'January': 1, 'February': 2, 'March': 3, 'April': 4,
     'May': 5, 'June': 6, 'July': 7, 'August': 8,
