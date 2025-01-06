@@ -53,7 +53,10 @@ const ApartmentComparisonWidgets = ({ data = {} }: { data: Record<string, RowDat
 
   const processData = useCallback(() => {
     if (!data || typeof data !== 'object' || Object.keys(data).length === 0) {
-      return {};
+      return {
+  'Nuno Gomez Piano uno - Lovely': { name: 'Lovely', monthlyPerformance: [] },
+  'Nuno Gomez Piano terra - Relaxing': { name: 'Relaxing', monthlyPerformance: [] }
+};
     }
 
     const apartments: ApartmentData = {
