@@ -67,9 +67,10 @@ const monthNameToNumber = (monthName: MonthName): number => {
 };
 
 // Helper function to get date from row
-const getDateFromRow = (row: DateRow): Date => {
+const getDateFromRow = (row: RentalData): Date => {
   const monthNum = monthNameToNumber(row.month);
-  return new Date(Number(row.year), monthNum - 1, 1);
+  const date = new Date(Number(row.year), monthNum - 1, 1);
+  return date;
 };
 
 const StatsCard: React.FC<StatsCardProps> = ({ icon: Icon, title, value, subtitle, secondaryValue, trend, period = 'This period', info }) => {
