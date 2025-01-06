@@ -394,7 +394,7 @@ const allData = Object.values(filteredByApartment).flat().sort((a, b) => {
     value={`€${Math.round(kpis.totalGross).toLocaleString()}`}
     secondaryValue={`€${Math.round(kpis.netIncome).toLocaleString()}`}
     trend={kpis.trends.revenue.toFixed(1)}
-    period={selectedYear === 'all' ? 'All time' : selectedYear}
+    period={selectedYear === 'all' ? 'All time' : String(selectedYear)}
     info={`Shows revenue trends ${kpis.trendPeriod}. Total revenue includes all bookings and additional services, with net income calculated after expenses and fees.`}
   />
   <StatsCard
@@ -403,7 +403,7 @@ const allData = Object.values(filteredByApartment).flat().sort((a, b) => {
     value={kpis.totalNights.toLocaleString()}
     subtitle="Nights booked"
     trend={kpis.trends.nights.toFixed(1)}
-    period={selectedYear === 'all' ? 'All time' : selectedYear}
+    period={selectedYear === 'all' ? 'All time' : String(selectedYear)}
     info={`Shows booking trends ${kpis.trendPeriod}. Represents total nights booked for the selected properties.`}
   />
   <StatsCard
@@ -412,7 +412,7 @@ const allData = Object.values(filteredByApartment).flat().sort((a, b) => {
     value={`${Math.round(kpis.occupancyRate)}%`}
     subtitle="Average occupancy"
     trend={kpis.trends.occupancy.toFixed(1)}
-    period={selectedYear === 'all' ? 'All time' : selectedYear}
+    period={selectedYear === 'all' ? 'All time' : String(selectedYear)}
     info={`Shows occupancy trends ${kpis.trendPeriod}. Calculated as percentage of available nights that were booked.`}
   />
   <StatsCard
@@ -421,7 +421,7 @@ const allData = Object.values(filteredByApartment).flat().sort((a, b) => {
     value={`€${Math.round(kpis.avgNightlyRate)}`}
     subtitle="Per night average"
     trend={kpis.trends.nightly.toFixed(1)}
-    period={selectedYear === 'all' ? 'All time' : selectedYear}
+    period={selectedYear === 'all' ? 'All time' : String(selectedYear)}
     info={`Shows pricing trends ${kpis.trendPeriod}. Represents average revenue earned per booked night.`}
   />
 </div>
