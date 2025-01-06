@@ -25,6 +25,14 @@ import ApartmentComparisonWidgets from '@/components/ApartmentComparisonWidgets'
 type MonthName = 'January' | 'February' | 'March' | 'April' | 'May' | 'June' | 
                  'July' | 'August' | 'September' | 'October' | 'November' | 'December';
 
+interface RentalData {
+  month: MonthName;
+  year: number;  // Changed from string to number
+  gross: number | string;
+  net: number | string;
+  nights: number | string;
+}
+
 interface ValueObject {
   value: number;
 }
@@ -142,7 +150,7 @@ const RentalDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState('both');
-  const [selectedYear, setSelectedYear] = useState('all');
+  const [selectedYear, setSelectedYear] = useState<'all' | number>('all');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -165,9 +173,9 @@ const RentalDashboard = () => {
   if (error) return <div className="p-6 text-center text-red-500">Error: {error}</div>;
   if (!data) return <div className="p-6 text-center">No data available</div>;
 const availableYears = [...new Set(
-  Object.values(data)
+  Object.values(data as DataStructure)
     .flat()
-    .map((row: RentalData) => row.year)
+    .map(row => Number(row.year))  // Convert to number explicitly
     .filter(Boolean)
 )].sort();
 
@@ -185,7 +193,7 @@ const filteredData: DataStructure = selectedYear === 'all'
       ...Object.fromEntries(
         Object.entries(filteredByApartment).map(([key, rows]) => [
           key,
-          rows.filter((row: RentalData) => row.year === selectedYear)
+          rows.filter((row: RentalData) => Number(row.year) === Number(selectedYear))
         ])
       )
     };
