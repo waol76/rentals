@@ -7,7 +7,7 @@ import Link from 'next/link';
 const Navbar = () => {
   const pathname = usePathname();
   
-  const isActive = (path) => pathname === path;
+  const isActive = (path: string) => pathname === path;
 
   return (
     <nav className="bg-white shadow mb-4">
