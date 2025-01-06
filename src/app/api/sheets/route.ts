@@ -82,7 +82,10 @@ export async function GET() {
   } catch (error) {
     console.error('Error fetching data from Google Sheets:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch data from Google Sheets', details: error.message },
+      { 
+        error: 'Failed to fetch data from Google Sheets', 
+        details: error instanceof Error ? error.message : 'Unknown error' 
+       },
       { status: 500 }
     );
   }
