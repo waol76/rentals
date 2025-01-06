@@ -73,8 +73,9 @@ const sortData = (rows: Array<Array<string>>, key: string): Array<Array<string>>
   if (error) return <div>Error: {error}</div>;
   if (!data) return <div>No data available</div>;
 
-  const headers = data[selectedTab]?.length > 0 ? Object.keys(data[selectedTab][0]) : [];
-  const rows = data[selectedTab]?.map((row) => headers.map((header) => row[header] || '')) || [];
+ const currentTab = selectedTab || Object.keys(data)[0];
+ const headers = data[currentTab]?.length > 0 ? Object.keys(data[currentTab][0]) : [];
+ const rows = data[currentTab]?.map((row) => headers.map((header) => row[header] || '')) || [];
 
   if (!Array.isArray(rows) || rows.length === 0) {
     return <div>No data available for the selected tab.</div>;
