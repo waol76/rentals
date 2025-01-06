@@ -28,7 +28,7 @@ interface ProcessedDataEntry {
   };
 }
 
-const GrossNetIncomeWidget = ({ data }) => {
+const GrossNetIncomeWidget = ({ data }: { data: Record<string, RowData[]> }) => {
   const [view, setView] = useState('monthly');
 
 const processData = (): ProcessedEntry[] => {
