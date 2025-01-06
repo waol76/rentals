@@ -203,11 +203,12 @@ const filteredData: DataStructure = selectedYear === 'all'
 
     // Calculate total available days
     const totalAvailableDays = uniqueMonths.reduce((total, monthKey) => {
-      const [year, month] = monthKey.split('-').map(Number);
-      const daysInMonth = new Date(year, month, 0).getDate();
-      const multiplier = viewMode === 'both' ? 2 : 1;
-      return total + (daysInMonth * multiplier);
-    }, 0);
+  if (!monthKey) return total;  // Skip if monthKey is null
+  const [year, month] = monthKey.split('-').map(Number);
+  const daysInMonth = new Date(year, month, 0).getDate();
+  const multiplier = viewMode === 'both' ? 2 : 1;
+  return total + (daysInMonth * multiplier);
+}, 0);
 
     // Calculate total nights booked
     const totalNightsBooked = data.reduce((sum, row) => sum + (Number(row.nights) || 0), 0);
