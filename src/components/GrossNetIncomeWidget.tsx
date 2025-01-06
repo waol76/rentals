@@ -3,11 +3,11 @@
 import React, { useState } from 'react';
 import { AreaChart, Area, Bar, BarChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 import { format, parse, getYear, getMonth, getDaysInMonth } from 'date-fns';
-import { monthNameToNumber } from '@/utils/dateUtils';
+import { MonthName, monthNameToNumber } from '@/utils/dateUtils';
 
 interface RowData {
   year: number;
-  month: string;  // Changed from number to string
+  month: MonthName;  // Changed from string to MonthName
   gross: number | string;
   net: number | string;
   nights: number | string;
@@ -15,19 +15,19 @@ interface RowData {
 }
 
 interface ProcessedDataEntry {
- month?: string;
- year?: number;
- gross: number;
- net: number;
- nights: number;
- monthSort?: string;
- daysInMonth?: number;
- occupancyRate?: number;
- _type?: {
-   gross: string;
-   net: string;
-   nights: string;
- };
+  month?: string;
+  year?: number;
+  gross: number;
+  net: number;
+  nights: number;
+  monthSort?: string;
+  daysInMonth?: number;
+  occupancyRate?: number;
+  _type?: {
+    gross: string;
+    net: string;
+    nights: string;
+  };
 }
 
 interface MonthMapEntry {
