@@ -1,6 +1,7 @@
 'use client';
 
 import { Euro, Bed, TrendingUp, BarChart, Icon as IconType } from 'lucide-react';
+import type { Icon as IconType } from 'lucide-react';
 
 
 const formatCurrency = (value: number) => 
