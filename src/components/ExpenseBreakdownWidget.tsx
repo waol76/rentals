@@ -15,45 +15,45 @@ interface ExpenseCategories {
 const ExpenseBreakdownWidget = ({ data }: { data: Record<string, any[]> }) => {
  const COLORS = ['#4ade80', '#f87171', '#60a5fa', '#fbbf24', '#a78bfa', '#34d399', '#fb923c', '#f472b6'];
 
- const calculateFinancials = () => {
-   const expenses = Object.values(data).flat().reduce(
-     (acc, row) => {
-       if (!row) return acc;
-       
-       const grossIncome = Math.abs(Number(row.gross) || 0);
-       const expenseCategories: ExpenseCategories = {
-         commissions: Math.abs(Number(row.commissions) || 0),
-         management: Math.abs(Number(row.management) || 0),
-         internet: Math.abs(Number(row.internet) || 0),
-         electricity: Math.abs(Number(row.electricity) || 0),
-         water: Math.abs(Number(row.water) || 0),
-         condominio: Math.abs(Number(row.condominio) || 0),
-         extra: Math.abs(Number(row.extra) || 0),
-       };
+const calculateFinancials = () => {
+  const expenses = Object.values(data).flat().reduce(
+    (acc, row) => {
+      if (!row) return acc;
+      
+      const grossIncome = Math.abs(Number(row.gross) || 0);
+      const expenseCategories: ExpenseCategories = {
+        commissions: Math.abs(Number(row.commissions) || 0),
+        management: Math.abs(Number(row.management) || 0),
+        internet: Math.abs(Number(row.internet) || 0),
+        electricity: Math.abs(Number(row.electricity) || 0),
+        water: Math.abs(Number(row.water) || 0),
+        condominio: Math.abs(Number(row.condominio) || 0),
+        extra: Math.abs(Number(row.extra) || 0),
+      };
 
-       return {
-         grossIncome: acc.grossIncome + grossIncome,
-         ...Object.keys(expenseCategories).reduce((expAcc, key) => ({
-           ...expAcc,
-           [key]: (acc[key] || 0) + expenseCategories[key as keyof ExpenseCategories]
-         }), {})
-       };
-     },
-     { grossIncome: 0 }
-   );
+      return {
+        grossIncome: acc.grossIncome + grossIncome,
+        ...Object.keys(expenseCategories).reduce((expAcc, key) => ({
+          ...expAcc,
+          [key]: (acc[key] || 0) + expenseCategories[key as keyof ExpenseCategories]
+        }), {})
+      };
+    },
+    { grossIncome: 0 }
+  );
 
-   const totalExpenses = Object.entries(expenses)
-     .filter(([key]) => key !== 'grossIncome')
-     .reduce((sum, [, value]) => sum + value, 0);
+  const totalExpenses = Object.entries(expenses)
+    .filter(([key]) => key !== 'grossIncome')
+    .reduce((sum, [, value]) => sum + (value as number), 0);
 
-   const netIncome = expenses.grossIncome - totalExpenses;
+  const netIncome = expenses.grossIncome - totalExpenses;
 
-   return {
-     expenses,
-     totalExpenses,
-     netIncome
-   };
- };
+  return {
+    expenses,
+    totalExpenses,
+    netIncome
+  };
+};
 
  const { expenses, totalExpenses, netIncome } = calculateFinancials();
 
