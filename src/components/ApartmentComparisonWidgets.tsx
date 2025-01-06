@@ -121,13 +121,13 @@ const ApartmentComparisonWidgets = ({ data = {} }: { data: Record<string, RowDat
     );
   }
 
-  const comparisonData = [
-    {
-      metric: 'Occupancy Rate (%)',
-      Lovely: apartmentData['Nuno Gomez Piano uno - Lovely']?.occupancyRate || 0,
-      Relaxing: apartmentData['Nuno Gomez Piano terra - Relaxing']?.occupancyRate || 0,
-      type: 'percentage'
-    },
+const comparisonData = [
+  {
+    metric: 'Occupancy Rate (%)',
+    Lovely: apartmentData['Nuno Gomez Piano uno - Lovely']?.occupancyRate ?? 0,
+    Relaxing: apartmentData['Nuno Gomez Piano terra - Relaxing']?.occupancyRate ?? 0,
+    type: 'percentage'
+  },
     {
       metric: 'Profit Margin (%)',
       Lovely: apartmentData['Nuno Gomez Piano uno - Lovely']?.profitMargin || 0,
