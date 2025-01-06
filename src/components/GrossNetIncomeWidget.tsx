@@ -12,11 +12,27 @@ interface RowData {
   [key: string]: any;
 }
 
+interface ProcessedDataEntry {
+  month?: string;
+  year?: number;
+  gross: number;
+  net: number;
+  nights: number;
+  monthSort?: string;
+  daysInMonth?: number;
+  occupancyRate?: number;
+  _type?: {
+    gross: string;
+    net: string;
+    nights: string;
+  };
+}
+
 const GrossNetIncomeWidget = ({ data }) => {
   const [view, setView] = useState('monthly');
 
-  const processData = () => {
-    const rawData = Object.values(data || {}).flat().filter(row => row?.gross !== undefined);
+const processData = (): ProcessedEntry[] => {
+  const rawData = Object.values(data || {}).flat().filter(row => row?.gross !== undefined);
     
     if (view === 'monthly') {
       // Create a map to combine data for the same month-year
@@ -120,34 +136,52 @@ const GrossNetIncomeWidget = ({ data }) => {
     return data;
   }, []);
 
-  const CustomTooltip = ({ active, payload, label }) => {
-    if (!active || !payload) return null;
-    
-    return (
-      <div className="bg-white p-4 border rounded shadow-lg">
-        <p className="font-bold">{label}</p>
-        {payload.map((item, index) => {
-          let value;
-          if (item.dataKey === 'nights') {
-            const totalNights = view === 'monthly' ? item.payload.nights : item.payload.nights / 12;
-            value = `${Math.round(totalNights)} nights`;
-          } else {
-            value = `€${Math.round(item.value).toLocaleString()}`;
-          }
-          
-          return (
-            <p 
-              key={index}
-              style={{ color: item.color }}
-              className="text-sm"  
-            >
-              {item.name}: {value}
-            </p>
-          );
-        })}
-      </div>
-    );
-  };
+  const CustomTooltip = ({ 
+ active, 
+ payload, 
+ label 
+}: { 
+ active?: boolean; 
+ payload?: Array<{
+   dataKey?: string;
+   value: number;
+   name?: string;
+   color?: string;
+   payload?: {
+     nights: number;
+   }
+ }>;
+ label?: string 
+}) => {
+ if (!active || !payload) return null;
+ 
+ return (
+   <div className="bg-white p-4 border rounded shadow-lg">
+     <p className="font-bold">{label}</p>
+     {payload.map((item, index) => {
+       let value;
+       if (item.dataKey === 'nights') {
+         const totalNights = view === 'monthly' 
+           ? item.payload?.nights 
+           : (item.payload?.nights || 0) / 12;
+         value = `${Math.round(totalNights)} nights`;
+       } else {
+         value = `€${Math.round(item.value).toLocaleString()}`;
+       }
+       
+       return (
+         <p 
+           key={index}
+           style={{ color: item.color }}
+           className="text-sm"  
+         >
+           {item.name}: {value}
+         </p>
+       );
+     })}
+   </div>
+ );
+};
 
   const formatYAxis = (value) => {
     return `${value} (${Math.round((value / (view === 'monthly' ? 60 : 732)) * 100)}%)`;
