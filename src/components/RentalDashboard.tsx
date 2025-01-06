@@ -23,9 +23,6 @@ import ExpenseBreakdownWidget from '@/components/ExpenseBreakdownWidget';
 import IncomeExpenseTable from '@/components/IncomeExpenseTable';
 import ApartmentComparisonWidgets from '@/components/ApartmentComparisonWidgets';
 
-type MonthName = 'January' | 'February' | 'March' | 'April' | 'May' | 'June' | 
-                 'July' | 'August' | 'September' | 'October' | 'November' | 'December';
-
 interface RentalData {
   month: MonthName;
   year: number;  // Changed from string to number
