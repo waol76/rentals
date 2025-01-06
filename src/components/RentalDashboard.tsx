@@ -22,18 +22,27 @@ import ExpenseBreakdownWidget from '@/components/ExpenseBreakdownWidget';
 import IncomeExpenseTable from '@/components/IncomeExpenseTable';
 import ApartmentComparisonWidgets from '@/components/ApartmentComparisonWidgets';
 
+type MonthName = 'January' | 'February' | 'March' | 'April' | 'May' | 'June' | 
+                 'July' | 'August' | 'September' | 'October' | 'November' | 'December';
+
+interface DateRow {
+  month: MonthName;
+  year: string;
+}
+
+
 // Helper function to convert month name to number (moved outside components for reuse)
-const monthNameToNumber = (monthName: string): number => {
+const monthNameToNumber = (monthName: MonthName): number => {
   const months = {
     'January': 1, 'February': 2, 'March': 3, 'April': 4,
     'May': 5, 'June': 6, 'July': 7, 'August': 8,
     'September': 9, 'October': 10, 'November': 11, 'December': 12
-  };
+  } as const;
   return months[monthName];
 };
 
 // Helper function to get date from row
-const getDateFromRow = (row) => {
+const getDateFromRow = (row: DateRow): Date => {
   const monthNum = monthNameToNumber(row.month);
   return new Date(Number(row.year), monthNum - 1, 1);
 };
