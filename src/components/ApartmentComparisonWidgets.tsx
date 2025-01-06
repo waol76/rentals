@@ -124,29 +124,29 @@ const ApartmentComparisonWidgets = ({ data = {} }: { data: Record<string, RowDat
 const comparisonData = [
   {
     metric: 'Occupancy Rate (%)',
-    Lovely: apartmentData['Nuno Gomez Piano uno - Lovely']?.occupancyRate ?? 0,
-    Relaxing: apartmentData['Nuno Gomez Piano terra - Relaxing']?.occupancyRate ?? 0,
+    Lovely: (apartmentData['Nuno Gomez Piano uno - Lovely'] as ApartmentInfo)?.occupancyRate ?? 0,
+    Relaxing: (apartmentData['Nuno Gomez Piano terra - Relaxing'] as ApartmentInfo)?.occupancyRate ?? 0,
     type: 'percentage'
   },
-    {
-      metric: 'Profit Margin (%)',
-      Lovely: apartmentData['Nuno Gomez Piano uno - Lovely']?.profitMargin || 0,
-      Relaxing: apartmentData['Nuno Gomez Piano terra - Relaxing']?.profitMargin || 0,
-      type: 'percentage'
-    },
-    {
-      metric: 'Nightly Rate (€)',
-      Lovely: apartmentData['Nuno Gomez Piano uno - Lovely']?.avgNightlyRate || 0,
-      Relaxing: apartmentData['Nuno Gomez Piano terra - Relaxing']?.avgNightlyRate || 0,
-      type: 'currency'
-    },
-    {
-      metric: 'Revenue/Day (€)',
-      Lovely: apartmentData['Nuno Gomez Piano uno - Lovely']?.revenuePerDay || 0,
-      Relaxing: apartmentData['Nuno Gomez Piano terra - Relaxing']?.revenuePerDay || 0,
-      type: 'currency'
-    }
-  ];
+  {
+    metric: 'Profit Margin (%)',
+    Lovely: (apartmentData['Nuno Gomez Piano uno - Lovely'] as ApartmentInfo)?.profitMargin ?? 0,
+    Relaxing: (apartmentData['Nuno Gomez Piano terra - Relaxing'] as ApartmentInfo)?.profitMargin ?? 0,
+    type: 'percentage'
+  },
+  {
+    metric: 'Nightly Rate (€)',
+    Lovely: (apartmentData['Nuno Gomez Piano uno - Lovely'] as ApartmentInfo)?.avgNightlyRate ?? 0,
+    Relaxing: (apartmentData['Nuno Gomez Piano terra - Relaxing'] as ApartmentInfo)?.avgNightlyRate ?? 0,
+    type: 'currency'
+  },
+  {
+    metric: 'Revenue/Day (€)',
+    Lovely: (apartmentData['Nuno Gomez Piano uno - Lovely'] as ApartmentInfo)?.revenuePerDay ?? 0,
+    Relaxing: (apartmentData['Nuno Gomez Piano terra - Relaxing'] as ApartmentInfo)?.revenuePerDay ?? 0,
+    type: 'currency'
+  }
+];
 
   const CustomTooltip = ({ active, payload, label }: {
     active?: boolean;
