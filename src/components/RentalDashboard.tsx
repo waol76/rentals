@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
+import { MonthName, monthNameToNumber } from '@/utils/dateUtils';
 import { 
   Calendar, 
   TrendingUp, 
@@ -63,16 +64,6 @@ interface StatsCardProps {
   info?: string;
 }
 
-
-// Helper function to convert month name to number (moved outside components for reuse)
-const monthNameToNumber = (monthName: MonthName): number => {
-  const months = {
-    'January': 1, 'February': 2, 'March': 3, 'April': 4,
-    'May': 5, 'June': 6, 'July': 7, 'August': 8,
-    'September': 9, 'October': 10, 'November': 11, 'December': 12
-  } as const;
-  return months[monthName];
-};
 
 // Helper function to get date from row
 const getDateFromRow = (row: RentalData): Date => {

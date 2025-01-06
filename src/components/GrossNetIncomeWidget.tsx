@@ -1,14 +1,17 @@
+'use client';
+
 import React, { useState } from 'react';
 import { AreaChart, Area, Bar, BarChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 import { format, parse, getYear, getMonth, getDaysInMonth } from 'date-fns';
+import { monthNameToNumber } from '@/utils/dateUtils';
 
 interface RowData {
- year: number;
- month: number;
- gross: number | string;
- net: number | string;
- nights: number | string;
- [key: string]: any;
+  year: number;
+  month: string;  // Changed from number to string
+  gross: number | string;
+  net: number | string;
+  nights: number | string;
+  [key: string]: any;
 }
 
 interface ProcessedDataEntry {
@@ -61,7 +64,8 @@ const GrossNetIncomeWidget = ({ data }: { data: Record<string, RowData[]> }) => 
    
    if (view === 'monthly') {
      const monthMap = rawData.reduce((acc: Record<string, MonthMapEntry>, row) => {
-       const key = `${row.year}-${String(row.month).padStart(2, '0')}`;
+        const monthNum = monthNameToNumber(row.month);
+        const key = `${row.year}-${String(monthNum).padStart(2, '0')}`;
        if (!acc[key]) {
          acc[key] = {
            month: `${row.month} ${row.year}`,
