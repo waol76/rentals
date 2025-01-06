@@ -44,26 +44,28 @@ const fetchData = async () => {
     fetchData();
   }, []);
 
-  const sortData = (rows, key) => {
+const sortData = (rows: Array<Array<string>>, key: string): Array<Array<string>> => {
     if (!key) return rows;
-
     const columnIndex = headers.findIndex((header) => header === key);
     if (columnIndex === -1) return rows;
-
     return [...rows].sort((a, b) => {
-      const aValue = a[columnIndex];
-      const bValue = b[columnIndex];
+      const aValue = a[columnIndex]?.toString() || '';
+      const bValue = b[columnIndex]?.toString() || '';
 
-      const aNum = parseFloat(aValue?.replace(/[€%,]/g, ''));
-      const bNum = parseFloat(bValue?.replace(/[€%,]/g, ''));
+      // Try to extract numbers if the values contain currency or percentage symbols
+      if (aValue.match(/[€$%,\d]/) && bValue.match(/[€$%,\d]/)) {
+        const aNum = parseFloat(aValue.replace(/[€$%,]/g, ''));
+        const bNum = parseFloat(bValue.replace(/[€$%,]/g, ''));
 
-      if (!isNaN(aNum) && !isNaN(bNum)) {
-        return sortConfig.direction === 'asc' ? aNum - bNum : bNum - aNum;
+        if (!isNaN(aNum) && !isNaN(bNum)) {
+          return sortConfig.direction === 'asc' ? aNum - bNum : bNum - aNum;
+        }
       }
 
-      if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
-      if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
-      return 0;
+      // Fall back to string comparison
+      return sortConfig.direction === 'asc' 
+        ? aValue.localeCompare(bValue)
+        : bValue.localeCompare(aValue);
     });
   };
 
