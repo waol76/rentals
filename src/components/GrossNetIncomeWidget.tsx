@@ -251,23 +251,31 @@ const calendarData = chartData.reduce((data: Array<{ date: Date; nights: number 
        </ResponsiveContainer>
        
        <ResponsiveContainer width="100%" height={150}>
-         <BarChart data={chartData}>
-           <XAxis dataKey={view === 'monthly' ? 'month' : 'year'} />
-           <YAxis domain={[0, 'dataMax']} tickLine={false} axisLine={false} />
-           <Tooltip content={<CustomTooltip />} />
-           <Bar dataKey="nights" fill="#ff7300">
-             {chartData.map((entry, index) => {
-               const roundedNights = Math.round(view === 'monthly' ? entry.nights : entry.nights / 12);
-               return (
-                 <Cell
-                   key={`cell-${index}`}
-                   fill={`rgba(255,115,0,${(entry.occupancyRate ?? 0) / 100})`}
-                   label={roundedNights > 0 ? roundedNights.toString() : ''}
-                 />
-               );
-             })}
-           </Bar>
-         </BarChart>
+<BarChart data={chartData}>
+  <XAxis dataKey={view === 'monthly' ? 'month' : 'year'} />
+  <YAxis domain={[0, 'dataMax']} tickLine={false} axisLine={false} />
+  <Tooltip content={<CustomTooltip />} />
+  <Bar dataKey="nights" fill="#ff7300">
+    {chartData.map((entry, index) => {
+      const roundedNights = Math.round(view === 'monthly' ? entry.nights : entry.nights / 12);
+      return (
+        <Cell
+          key={`cell-${index}`}
+          fill={`rgba(255,115,0,${(entry.occupancyRate ?? 0) / 100})`}
+        >
+          <text 
+            x="50%" 
+            y="50%" 
+            textAnchor="middle" 
+            dominantBaseline="middle"
+          >
+            {roundedNights > 0 ? roundedNights.toString() : ''}
+          </text>
+        </Cell>
+      );
+    })}
+  </Bar>
+</BarChart>
        </ResponsiveContainer>
      </div>
 
