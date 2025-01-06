@@ -129,7 +129,7 @@ const GrossNetIncomeWidget = ({ data }: { data: Record<string, RowData[]> }) => 
 
  const chartData = processData();
 
- const calendarData = chartData.reduce((data, entry) => {
+const calendarData = chartData.reduce((data: Array<{ date: Date; nights: number }>, entry) => {
   if (view === 'monthly' && entry.month) {
     const month = parse(entry.month, 'MMMM yyyy', new Date());
     const numDays = getDaysInMonth(month);
