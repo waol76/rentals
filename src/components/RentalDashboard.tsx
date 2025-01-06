@@ -25,6 +25,10 @@ import ApartmentComparisonWidgets from '@/components/ApartmentComparisonWidgets'
 type MonthName = 'January' | 'February' | 'March' | 'April' | 'May' | 'June' | 
                  'July' | 'August' | 'September' | 'October' | 'November' | 'December';
 
+interface ValueObject {
+  value: number;
+}
+
 interface DateRow {
   month: MonthName;
   year: string;
@@ -228,7 +232,7 @@ const filteredData: DataStructure = selectedYear === 'all'
       };
     };
 
-    const calculatePercentChange = (current, previous) => {
+    const calculatePercentChange = (current: ValueObject, previous: ValueObject) => {
       if (!current || !previous || previous.value === 0) return 0;
       return ((current.value - previous.value) / previous.value) * 100;
     };
