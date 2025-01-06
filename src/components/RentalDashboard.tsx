@@ -309,11 +309,11 @@ const filteredData: DataStructure = selectedYear === 'all'
     } else {
       // For all-time view, compare last 6 months vs previous 6 months
       // First sort the data by date while maintaining apartment filter
-      const allData = Object.values(filteredByApartment).flat().sort((a, b) => {
-        const dateA = getDateFromRow(a);
-        const dateB = getDateFromRow(b);
-        return dateB - dateA;
-      });
+const allData = Object.values(filteredByApartment).flat().sort((a, b) => {
+  const dateA = getDateFromRow(a);
+  const dateB = getDateFromRow(b);
+  return Number(dateB) - Number(dateA); // Explicitly convert to numbers
+});
 
       const last6Months = allData.slice(0, 6);
       const previous6Months = allData.slice(6, 12);
