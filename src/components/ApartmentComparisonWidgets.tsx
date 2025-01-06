@@ -5,10 +5,20 @@ import {
  ComposedChart, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis
 } from 'recharts';
 
+// Add interfaces here
 interface ApartmentData {
- 'Nuno Gomez Piano uno - Lovely': { name: string; monthlyPerformance: any[] };
- 'Nuno Gomez Piano terra - Relaxing': { name: string; monthlyPerformance: any[] };
- [key: string]: { name: string; monthlyPerformance: any[] };
+  'Nuno Gomez Piano uno - Lovely': ApartmentInfo;
+  'Nuno Gomez Piano terra - Relaxing': ApartmentInfo;
+  [key: string]: ApartmentInfo;
+}
+
+interface ApartmentInfo {
+  name: string;
+  monthlyPerformance: any[];
+  avgNightlyRate?: number;
+  occupancyRate?: number;
+  profitMargin?: number;
+  revenuePerDay?: number;
 }
 
 const ApartmentComparisonWidgets = ({ data = {} }: { data: Record<string, any[]> }) => {
