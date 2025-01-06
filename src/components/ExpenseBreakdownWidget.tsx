@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-const ExpenseBreakdownWidget = ({ data }) => {
+const ExpenseBreakdownWidget = ({ data }: { data: Record<string, any[]> }) => {
   const COLORS = ['#4ade80', '#f87171', '#60a5fa', '#fbbf24', '#a78bfa', '#34d399', '#fb923c', '#f472b6'];
 
   const calculateFinancials = () => {
