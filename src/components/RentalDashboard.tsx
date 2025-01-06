@@ -30,6 +30,17 @@ interface DateRow {
   year: string;
 }
 
+interface StatsCardProps {
+  icon: React.ElementType;
+  title: string;
+  value: string;
+  subtitle?: string;
+  secondaryValue?: string;
+  trend?: string;
+  period?: string;
+  info?: string;
+}
+
 
 // Helper function to convert month name to number (moved outside components for reuse)
 const monthNameToNumber = (monthName: MonthName): number => {
@@ -47,7 +58,7 @@ const getDateFromRow = (row: DateRow): Date => {
   return new Date(Number(row.year), monthNum - 1, 1);
 };
 
-const StatsCard = ({ icon: Icon, title, value, subtitle, secondaryValue, trend, period = 'This period', info }) => {
+const StatsCard: React.FC<StatsCardProps> = ({ icon: Icon, title, value, subtitle, secondaryValue, trend, period = 'This period', info }) => {
   const trendValue = parseFloat(trend);
   
   return (
