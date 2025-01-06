@@ -70,7 +70,7 @@ export async function GET() {
           };
         } catch (err) {
           console.error('Error processing row:', row, err);
-          return null; // Exclude problematic rows
+          return null; // Exclude problematic rows now
         }
       }).filter(Boolean); // Remove any null rows
 
