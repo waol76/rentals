@@ -44,8 +44,19 @@ const ExpenseBreakdownWidget = ({ data }: { data: Record<string, RowData[]> }) =
  const COLORS = ['#4ade80', '#f87171', '#60a5fa', '#fbbf24', '#a78bfa', '#34d399', '#fb923c', '#f472b6'];
 
  const calculateFinancials = (): FinancialSummary => {
+   const initialAccumulator: FinancialSummary = {
+     grossIncome: 0,
+     commissions: 0,
+     management: 0,
+     internet: 0,
+     electricity: 0,
+     water: 0,
+     condominio: 0,
+     extra: 0
+   };
+
    const expenses = Object.values(data).flat().reduce(
-     (acc, row) => {
+     (acc: FinancialSummary, row: RowData) => {
        if (!row) return acc;
        
        const grossIncome = Math.abs(Number(row.gross) || 0);
@@ -64,20 +75,11 @@ const ExpenseBreakdownWidget = ({ data }: { data: Record<string, RowData[]> }) =
          ...Object.keys(expenseCategories).reduce((expAcc, key) => ({
            ...expAcc,
            [key as keyof ExpenseCategories]: 
-             ((acc as any)[key] || 0) + expenseCategories[key as keyof ExpenseCategories]
+             (acc[key as keyof ExpenseCategories] || 0) + expenseCategories[key as keyof ExpenseCategories]
          }), {})
        };
      },
-     { 
-       grossIncome: 0,
-       commissions: 0,
-       management: 0,
-       internet: 0,
-       electricity: 0,
-       water: 0,
-       condominio: 0,
-       extra: 0
-     }
+     initialAccumulator
    );
 
    const totalExpenses = Object.entries(expenses)
