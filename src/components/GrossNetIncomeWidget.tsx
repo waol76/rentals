@@ -185,7 +185,7 @@ const calendarData = chartData.reduce((data: Array<{ date: Date; nights: number 
            const totalNights = view === 'monthly' 
              ? item.payload?.nights 
              : (item.payload?.nights || 0) / 12;
-           value = `${Math.round(totalNights)} nights`;
+           value = `${Math.round(Number(totalNights))} nights`;
          } else {
            value = `€${Math.round(item.value).toLocaleString()}`;
          }
