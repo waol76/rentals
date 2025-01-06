@@ -376,7 +376,7 @@ const allData = Object.values(filteredByApartment).flat().sort((a, b) => {
           </div>
           <select
             value={selectedYear}
-            onChange={(e) => setSelectedYear(e.target.value)}
+            onChange={(e) => setSelectedYear(e.target.value === 'all' ? 'all' : Number(e.target.value))}
             className="px-4 py-2 rounded-lg border bg-white"
           >
             <option value="all">All Years</option>
