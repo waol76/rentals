@@ -2,7 +2,7 @@
 
 import { Euro, Bed, TrendingUp, BarChart } from 'lucide-react';
 
-const formatCurrency = (value) => 
+const formatCurrency = (value: number) => 
   new Intl.NumberFormat('en-US', { style: 'currency', currency: 'EUR' }).format(value);
 
 const SummaryCard = ({ title, value, change, icon: Icon }) => (
