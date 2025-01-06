@@ -310,7 +310,7 @@ const filteredData: DataStructure = selectedYear === 'all'
       // Get previous year data maintaining the same apartment filter
       const previousYearData = Object.values(filteredByApartment)
         .flat()
-        .filter(row => row?.year === String(Number(selectedYear) - 1));
+        .filter(row => row?.year === Number(selectedYear) - 1);
       
       trends = calculateTrends(processedData, previousYearData);
       trendPeriod = `vs ${Number(selectedYear) - 1}`;
