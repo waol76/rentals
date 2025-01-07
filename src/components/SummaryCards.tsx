@@ -59,28 +59,29 @@ const SummaryCards = ({
     if (!data || !data.length) return null;
     
     const currentYear = new Date().getFullYear();
+    
     const currentData = apartment === 'Both' 
-      ? data.filter(d => d.lovelyData?.year === currentYear)
+      ? data.filter(d => d.lovelyData?.year === currentYear || d.relaxingData?.year === currentYear)
       : data.filter(d => d.year === currentYear);
 
     const lastYearData = apartment === 'Both'
-      ? data.filter(d => d.lovelyData?.year === currentYear - 1)
+      ? data.filter(d => d.lovelyData?.year === currentYear - 1 || d.relaxingData?.year === currentYear - 1)
       : data.filter(d => d.year === currentYear - 1);
 
     const ytdRevenue = currentData.reduce((sum, entry) => 
       sum + (apartment === 'Both' 
         ? ((entry.lovelyData?.gross || 0) + (entry.relaxingData?.gross || 0))
-        : entry.gross), 0);
+        : (entry.gross || 0)), 0);
 
     const lastYearRevenue = lastYearData.reduce((sum, entry) =>
       sum + (apartment === 'Both'
         ? ((entry.lovelyData?.gross || 0) + (entry.relaxingData?.gross || 0))
-        : entry.gross), 0);
+        : (entry.gross || 0)), 0);
 
     const totalNights = currentData.reduce((sum, entry) =>
       sum + (apartment === 'Both'
         ? ((entry.lovelyData?.nights || 0) + (entry.relaxingData?.nights || 0))
-        : entry.nights), 0);
+        : (entry.nights || 0)), 0);
 
     const totalPossibleNights = currentData.length * 30 * (apartment === 'Both' ? 2 : 1);
     const nightsOccupiedPercentage = (totalNights / totalPossibleNights) * 100;
@@ -88,7 +89,7 @@ const SummaryCards = ({
     const avgOccupancy = currentData.reduce((sum, entry) =>
       sum + (apartment === 'Both'
         ? (((entry.lovelyData?.occupancy || 0) + (entry.relaxingData?.occupancy || 0)) / 2)
-        : entry.occupancy), 0) / (currentData.length || 1);
+        : (entry.occupancy || 0)), 0) / (currentData.length || 1);
 
     const revenueChange = lastYearRevenue 
       ? ((ytdRevenue - lastYearRevenue) / lastYearRevenue) * 100 
