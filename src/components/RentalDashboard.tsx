@@ -296,11 +296,15 @@ const filteredData: DataStructure = selectedYear === 'all'
 
     if (selectedYear !== 'all') {
       // Get previous year data maintaining the same apartment filter
-      const previousYearData = Object.values(filteredByApartment)
-        .flat()
-        .filter(row => row?.year === Number(selectedYear) - 1);
+      const previousYearData = Object.values(filteredByApartment) // Changed from data to filteredByApartment
+  .flat()
+  .filter(row => String(row?.year) === String(Number(selectedYear) - 1));
       
+        console.log('Current data:', processedData);
+        console.log('Previous year data:', previousYearData);
+  
       trends = calculateTrends(processedData, previousYearData);
+        console.log('Calculated trends:', trends);
       trendPeriod = `vs ${Number(selectedYear) - 1}`;
     } else {
       // For all-time view, compare last 6 months vs previous 6 months
