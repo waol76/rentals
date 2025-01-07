@@ -18,7 +18,7 @@ import {
   TooltipTrigger 
 } from '@/components/ui/tooltip';
 
-import GXXXrossNetIncomeWidget from '@/components/GrossNetIncomeWidget';
+import GrossNetIncomeWidget from '@/components/GrossNetIncomeWidget';
 import ExpenseBreakdownWidget from '@/components/ExpenseBreakdownWidget';
 import IncomeExpenseTable from '@/components/IncomeExpenseTable';
 import ApartmentComparisonWidgets from '@/components/ApartmentComparisonWidgets';
