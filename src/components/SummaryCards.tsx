@@ -27,7 +27,7 @@ const formatCurrency = (value: number) =>
 const SummaryCard = ({ title, value, change, icon: Icon }: {
   title: string;
   value: string;
-  change?: number;
+  change?: number | string;
   icon: LucideIcon;
 }) => (
   <div className="bg-white rounded-lg shadow p-4 border">
@@ -115,7 +115,7 @@ const SummaryCards = ({
       <SummaryCard
         title="YTD Revenue"
         value={formatCurrency(metrics.ytdRevenue)}
-        change={metrics.revenueChange.toFixed(1)}
+        change={metrics.revenueChange}
         icon={Euro}
       />
       <SummaryCard
