@@ -1,7 +1,25 @@
-'use client';
-
 import { Euro, Bed, TrendingUp, BarChart } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+
+// Define interfaces for your data structure
+interface ApartmentData {
+  year?: number;
+  lovelyData?: {
+    year?: number;
+    gross?: number;
+    nights?: number;
+    occupancy?: number;
+  };
+  relaxingData?: {
+    year?: number;
+    gross?: number;
+    nights?: number;
+    occupancy?: number;
+  };
+  gross?: number;
+  nights?: number;
+  occupancy?: number;
+}
 
 const formatCurrency = (value: number) => 
   new Intl.NumberFormat('en-US', { style: 'currency', currency: 'EUR' }).format(value);
@@ -10,7 +28,7 @@ const SummaryCard = ({ title, value, change, icon: Icon }: {
   title: string;
   value: string;
   change?: number;
-  icon: LucideIcon; // Changed from IconType to LucideIcon
+  icon: LucideIcon;
 }) => (
   <div className="bg-white rounded-lg shadow p-4 border">
     <div className="flex justify-between">
@@ -30,7 +48,13 @@ const SummaryCard = ({ title, value, change, icon: Icon }: {
   </div>
 );
 
-const SummaryCards = ({ data, apartment }) => {
+const SummaryCards = ({ 
+  data, 
+  apartment 
+}: { 
+  data: ApartmentData[], 
+  apartment: 'Lovely' | 'Relaxing' | 'Both' 
+}) => {
   const calcMetrics = () => {
     if (!data || !data.length) return null;
     
@@ -53,6 +77,14 @@ const SummaryCards = ({ data, apartment }) => {
         ? ((entry.lovelyData?.gross || 0) + (entry.relaxingData?.gross || 0))
         : entry.gross), 0);
 
+    const totalNights = currentData.reduce((sum, entry) =>
+      sum + (apartment === 'Both'
+        ? ((entry.lovelyData?.nights || 0) + (entry.relaxingData?.nights || 0))
+        : entry.nights), 0);
+
+    const totalPossibleNights = currentData.length * 30 * (apartment === 'Both' ? 2 : 1);
+    const nightsOccupiedPercentage = (totalNights / totalPossibleNights) * 100;
+
     const avgOccupancy = currentData.reduce((sum, entry) =>
       sum + (apartment === 'Both'
         ? (((entry.lovelyData?.occupancy || 0) + (entry.relaxingData?.occupancy || 0)) / 2)
@@ -62,19 +94,15 @@ const SummaryCards = ({ data, apartment }) => {
       ? ((ytdRevenue - lastYearRevenue) / lastYearRevenue) * 100 
       : 0;
 
-    const totalNights = currentData.reduce((sum, entry) =>
-      sum + (apartment === 'Both'
-        ? ((entry.lovelyData?.nights || 0) + (entry.relaxingData?.nights || 0))
-        : entry.nights), 0);
-
-    const totalPossibleNights = currentData.length * 30 * (apartment === 'Both' ? 2 : 1);
     const revpar = ytdRevenue / totalPossibleNights;
 
     return {
       ytdRevenue,
       revenueChange,
       avgOccupancy,
-      revpar
+      revpar,
+      totalNights,
+      nightsOccupiedPercentage
     };
   };
 
