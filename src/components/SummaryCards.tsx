@@ -1,8 +1,7 @@
 'use client';
 
 import { Euro, Bed, TrendingUp, BarChart } from 'lucide-react';
-import type { Icon as IconType } from 'lucide-react';
-
+import type { LucideIcon } from 'lucide-react';
 
 const formatCurrency = (value: number) => 
   new Intl.NumberFormat('en-US', { style: 'currency', currency: 'EUR' }).format(value);
@@ -11,7 +10,7 @@ const SummaryCard = ({ title, value, change, icon: Icon }: {
   title: string;
   value: string;
   change?: number;
-  icon: IconType; // Add this line back
+  icon: LucideIcon; // Changed from IconType to LucideIcon
 }) => (
   <div className="bg-white rounded-lg shadow p-4 border">
     <div className="flex justify-between">
