@@ -11,6 +11,7 @@ const SummaryCard = ({ title, value, change, icon: Icon }: {
   title: string;
   value: string;
   change?: number;
+  icon: IconType; // Add this line back
 }) => (
   <div className="bg-white rounded-lg shadow p-4 border">
     <div className="flex justify-between">
