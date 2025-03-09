@@ -1,0 +1,42 @@
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+
+export async function middleware(request: NextRequest) {
+  console.log('🔍 Middleware executing for path:', request.nextUrl.pathname)
+
+  // Don't protect these paths
+  if (request.nextUrl.pathname.startsWith('/api/auth') || 
+      request.nextUrl.pathname.startsWith('/_next') || 
+      request.nextUrl.pathname === '/favicon.ico') {
+    console.log('✅ Public path detected, allowing access:', request.nextUrl.pathname)
+    return NextResponse.next()
+  }
+
+  try {
+    console.log('🔄 Fetching session from:', `${request.nextUrl.origin}/api/auth/session`)
+    const response = await fetch(`${request.nextUrl.origin}/api/auth/session`)
+    const session = await response.json()
+    
+    console.log('📦 Session data:', JSON.stringify(session, null, 2))
+
+    if (!session?.user) {
+      console.log('⛔ No user in session, redirecting to sign in')
+      const signInUrl = new URL('/api/auth/signin', request.url)
+      signInUrl.searchParams.set('callbackUrl', request.url)
+      console.log('🔀 Redirecting to:', signInUrl.toString())
+      return NextResponse.redirect(signInUrl)
+    }
+
+    console.log('✅ User authenticated, allowing access')
+    return NextResponse.next()
+  } catch (error) {
+    console.error('❌ Middleware error:', error)
+    return NextResponse.redirect(new URL('/api/auth/signin', request.url))
+  }
+}
+
+export const config = {
+  matcher: [
+    '/((?!api/auth|_next/static|_next/image|favicon.ico).*)'
+  ]
+}
