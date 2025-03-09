@@ -3,10 +3,6 @@ import Google from 'next-auth/providers/google'
 import { JWT } from 'next-auth/jwt'
 import { Session } from 'next-auth'
 
-interface ExtendedSession extends Session {
-  error?: string
-}
-
 const handler = NextAuth({
   providers: [
     Google({
@@ -30,7 +26,7 @@ const handler = NextAuth({
       }
       return token
     },
-    async session({ session, token }: { session: ExtendedSession; token: JWT }) {
+    async session({ session, token }) {
       if (token) {
         session.user = {
           id: token.sub,
