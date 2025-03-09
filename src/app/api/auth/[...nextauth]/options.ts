@@ -5,7 +5,7 @@ import Google from 'next-auth/providers/google'
 const allowedEmails = [
   'waol76@gmail.com',
   'catua81@gmail.com',
-  'leonardoberti011@gmail.com',
+  //'leonardoberti011@gmail.com',
   // Add more authorized emails as needed
 ];
 
@@ -17,9 +17,16 @@ export const options: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async signIn({ user }) {
-      // If the user's email isn't in the allowed list, return false to show error
-      return user.email ? allowedEmails.includes(user.email) : false;
+    async signIn({ user, account, profile }) {
+      // Check if the user's email is allowed
+      const isAllowedEmail = user.email ? allowedEmails.includes(user.email) : false;
+      
+      if (!isAllowedEmail) {
+        // Instead of just returning false, return a specific error path
+        return `/auth/error?error=AccessDenied&email=${encodeURIComponent(user.email || '')}`;
+      }
+      
+      return true;
     },
     async jwt({ token, user, account }) {
       if (account && user) {
@@ -47,16 +54,13 @@ export const options: NextAuthOptions = {
     }
   },
   pages: {
-    // This is essential - define your custom error page here
     error: '/auth/error',
-    // You can also define custom signIn and signOut pages if needed
-    // signIn: '/auth/signin',
-    // signOut: '/auth/signout',
+    signIn: '/api/auth/signin',
   },
   session: {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   secret: process.env.NEXTAUTH_SECRET,
-  debug: process.env.NODE_ENV === "development",
+  debug: true, // Enable debug for troubleshooting
 }
