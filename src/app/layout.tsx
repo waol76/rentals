@@ -3,33 +3,12 @@ import type { Metadata } from 'next'
 import Navbar from '@/components/Navbar'
 import SessionProvider from '@/components/auth/SessionProvider'
 import ProtectedRoute from '@/components/auth/ProtectedRoute'
+import { getServerSession } from 'next-auth'
+import { options } from '@/app/api/auth/[...nextauth]/options'
 
 export const metadata: Metadata = {
   title: 'Rental Dashboard',
   description: 'Rental property analytics dashboard'
-}
-
-async function getSession() {
-  try {
-    const response = await fetch(`http://localhost:3000/api/auth/session`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      cache: 'no-store'
-    })
-
-    if (!response.ok) {
-      console.error('Failed to fetch session:', response.status)
-      return null
-    }
-
-    const session = await response.json()
-    return session
-  } catch (error) {
-    console.error('Failed to fetch session:', error)
-    return null
-  }
 }
 
 export default async function RootLayout({
@@ -37,7 +16,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const session = await getSession()
+  const session = await getServerSession(options)
 
   return (
     <html lang="en" className="h-full">
