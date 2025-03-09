@@ -5,7 +5,6 @@ import Google from 'next-auth/providers/google'
 const allowedEmails = [
   'waol76@gmail.com',
   'catua81@gmail.com',
-  //'leonardoberti011@gmail.com',
   // Add more authorized emails as needed
 ];
 
@@ -18,7 +17,7 @@ export const options: NextAuthOptions = {
   ],
   callbacks: {
     async signIn({ user }) {
-      // Simply return true or false based on email - avoid custom redirect URLs
+      // Only allow sign-in if the user's email is in the allowedEmails list
       return user.email ? allowedEmails.includes(user.email) : false;
     },
     async jwt({ token, user, account }) {
@@ -46,11 +45,10 @@ export const options: NextAuthOptions = {
       return session
     }
   },
-  // Remove custom pages to avoid redirection issues
   session: {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   secret: process.env.NEXTAUTH_SECRET,
-  debug: false,
+  debug: process.env.NODE_ENV === "development",
 }
