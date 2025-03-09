@@ -28,12 +28,10 @@ const handler = NextAuth({
     },
     async session({ session, token }) {
       if (token) {
-        session.user = {
-          id: token.sub,
-          name: token.name,
-          email: token.email,
-          image: token.picture,
-        }
+        (session.user as any).id = token.sub;
+        session.user.name = token.name;
+        session.user.email = token.email;
+        session.user.image = token.picture;
       }
       return session
     }

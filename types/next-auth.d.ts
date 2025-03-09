@@ -14,11 +14,18 @@ declare module 'next-auth' {
       image?: string | null;
     }
   }
+
+  interface Account {
+    id: string;
+  }
 }
 
 declare module 'next-auth/jwt' {
   interface JWT {
     id?: string;
     sub?: string;
+    name?: string | null;
+    email?: string | null;
+    picture?: string | null;
   }
 }
