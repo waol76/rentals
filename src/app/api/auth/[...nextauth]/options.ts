@@ -17,7 +17,7 @@ export const options: NextAuthOptions = {
   ],
   callbacks: {
     async signIn({ user }) {
-      // Only allow sign-in if the user's email is in the allowedEmails list
+      // If the user's email isn't in the allowed list, return false to show error
       return user.email ? allowedEmails.includes(user.email) : false;
     },
     async jwt({ token, user, account }) {
@@ -45,13 +45,16 @@ export const options: NextAuthOptions = {
       return session
     }
   },
+  pages: {
+    // This is essential - define your custom error page here
+    error: '/auth/error',
+    // You can also define custom signIn and signOut pages if needed
+    // signIn: '/auth/signin',
+    // signOut: '/auth/signout',
+  },
   session: {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 days
-  },
-  pages: {
-    // Optional: Create a custom error page for access denied
-    error: '/auth/error',
   },
   secret: process.env.NEXTAUTH_SECRET,
   debug: process.env.NODE_ENV === "development",
