@@ -1,13 +1,34 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { Card, CardContent } from '@/components/ui/card';
 import { MonthName, monthNameToNumber } from '@/utils/dateUtils';
-import DashboardView from '@/components/DashboardView';
-import AnalyticsView from '@/components/AnalyticsView';
+import { 
+  Calendar, 
+  TrendingUp, 
+  DollarSign, 
+  Percent, 
+  Info, 
+  TrendingDown 
+} from 'lucide-react';
+import { 
+  Tooltip, 
+  TooltipContent, 
+  TooltipProvider, 
+  TooltipTrigger 
+} from '@/components/ui/tooltip';
+
+import GrossNetIncomeWidget from '@/components/GrossNetIncomeWidget';
+import ExpenseBreakdownWidget from '@/components/ExpenseBreakdownWidget';
+import IncomeExpenseTable from '@/components/IncomeExpenseTable';
+import ApartmentComparisonWidgets from '@/components/ApartmentComparisonWidgets';
+import MonthlyComparison from '@/components/MonthlyComparison';
+import YearOverYearComparison from '@/components/YearOverYearComparison';
+import SeasonalAnalysisWidget from '@/components/SeasonalAnalysisWidget';
 
 interface RentalData {
   month: MonthName;
-  year: number;
+  year: number;  // Changed from string to number
   gross: number | string;
   net: number | string;
   nights: number | string;
@@ -19,7 +40,7 @@ interface ValueObject {
 
 interface DateRow {
   month: MonthName;
-  year: number;
+  year: number;  // Changed from string to number
 }
 
 interface RentalData extends DateRow {
@@ -32,11 +53,87 @@ interface DataStructure {
   [key: string]: RentalData[];
 }
 
+interface StatsCardProps {
+  icon: React.ElementType;
+  title: string;
+  value: string;
+  subtitle?: string;
+  secondaryValue?: string;
+  trend?: string;
+  period?: string;
+  info?: string;
+}
+
+
 // Helper function to get date from row
 const getDateFromRow = (row: RentalData): Date => {
   const monthNum = monthNameToNumber(row.month);
   const date = new Date(Number(row.year), monthNum - 1, 1);
   return date;
+};
+
+const StatsCard: React.FC<StatsCardProps> = ({ icon: Icon, title, value, subtitle, secondaryValue, trend, period = 'This period', info }) => {
+  const trendValue = trend ? parseFloat(trend) : 0;
+  
+  return (
+    <Card className="bg-white">
+      <CardContent className="p-4 h-full">
+        <div className="flex gap-3 items-center min-h-[120px]">
+          <div className="flex-shrink-0">
+            <div className="p-2 bg-blue-100 rounded-lg">
+              <Icon className="w-5 h-5 text-blue-600" />
+            </div>
+          </div>
+          <div className="flex-1 flex flex-col">
+            <div className="flex items-center gap-2">
+              <p className="text-gray-600">{title}</p>
+              {info && (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Info className="w-4 h-4 text-gray-400" />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="max-w-xs">{info}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
+            </div>
+            
+            <div className="flex items-baseline gap-2 mt-1">
+              <h3 className="text-2xl font-semibold">{value}</h3>
+              {trend && (
+                <div className={`flex items-center text-sm ${
+                  trendValue >= 0 ? 'text-green-600' : 'text-red-600'
+                }`}>
+                  {trendValue >= 0 ? 
+                    <TrendingUp className="w-4 h-4" /> : 
+                    <TrendingDown className="w-4 h-4" />
+                  }
+                  <span>{Math.abs(trendValue)}%</span>
+                </div>
+              )}
+            </div>
+            
+            {secondaryValue ? (
+              <>
+                <p className="text-sm text-gray-400">Gross income</p>
+                <div className="mt-2 pt-2 border-t">
+                  <p className="text-base text-green-600">{secondaryValue}</p>
+                  <p className="text-sm text-gray-400">Net income</p>
+                </div>
+              </>
+            ) : (
+              <p className="text-sm text-gray-400">{subtitle}</p>
+            )}
+            
+            <p className="text-xs text-gray-400 mt-auto">{period}</p>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
 };
 
 const RentalDashboard = () => {
@@ -45,7 +142,6 @@ const RentalDashboard = () => {
   const [error, setError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState('both');
   const [selectedYear, setSelectedYear] = useState<'all' | number>('all');
-  const [activeTab, setActiveTab] = useState('dashboard');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,32 +163,31 @@ const RentalDashboard = () => {
   if (loading) return <div className="p-6 text-center">Loading...</div>;
   if (error) return <div className="p-6 text-center text-red-500">Error: {error}</div>;
   if (!data) return <div className="p-6 text-center">No data available</div>;
-  
-  const availableYears = [...new Set(
-    Object.values(data as DataStructure)
-      .flat()
-      .map(row => Number(row.year))
-      .filter(Boolean)
-  )].sort();
+const availableYears = [...new Set(
+  Object.values(data as DataStructure)
+    .flat()
+    .map(row => Number(row.year))  // Convert to number explicitly
+    .filter(Boolean)
+)].sort();
 
   const filteredByApartment: DataStructure = viewMode === 'both'
-    ? data
-    : {
-        [`Nuno Gomez Piano ${viewMode === 'Lovely' ? 'uno - Lovely' : 'terra - Relaxing'}`]: 
-          data?.[`Nuno Gomez Piano ${viewMode === 'Lovely' ? 'uno - Lovely' : 'terra - Relaxing'}`] || []
-      };
+  ? data
+  : {
+      [`Nuno Gomez Piano ${viewMode === 'Lovely' ? 'uno - Lovely' : 'terra - Relaxing'}`]: 
+        data?.[`Nuno Gomez Piano ${viewMode === 'Lovely' ? 'uno - Lovely' : 'terra - Relaxing'}`] || []
+    };
 
-  const filteredData: DataStructure = selectedYear === 'all' 
-    ? filteredByApartment
-    : {
-        ...filteredByApartment,
-        ...Object.fromEntries(
-          Object.entries(filteredByApartment).map(([key, rows]) => [
-            key,
-            rows.filter((row: RentalData) => Number(row.year) === Number(selectedYear))
-          ])
-        )
-      };
+const filteredData: DataStructure = selectedYear === 'all' 
+  ? filteredByApartment
+  : {
+      ...filteredByApartment,
+      ...Object.fromEntries(
+        Object.entries(filteredByApartment).map(([key, rows]) => [
+          key,
+          rows.filter((row: RentalData) => Number(row.year) === Number(selectedYear))
+        ])
+      )
+    };
 
   const processedData: RentalData[] = Object.values(filteredData).flat().filter((row): row is RentalData => row && typeof row === 'object');
 
@@ -112,12 +207,12 @@ const RentalDashboard = () => {
 
     // Calculate total available days
     const totalAvailableDays = uniqueMonths.reduce((total, monthKey) => {
-      if (!monthKey) return total;  // Skip if monthKey is null
-      const [year, month] = monthKey.split('-').map(Number);
-      const daysInMonth = new Date(year, month, 0).getDate();
-      const multiplier = viewMode === 'both' ? 2 : 1;
-      return total + (daysInMonth * multiplier);
-    }, 0);
+  if (!monthKey) return total;  // Skip if monthKey is null
+  const [year, month] = monthKey.split('-').map(Number);
+  const daysInMonth = new Date(year, month, 0).getDate();
+  const multiplier = viewMode === 'both' ? 2 : 1;
+  return total + (daysInMonth * multiplier);
+}, 0);
 
     // Calculate total nights booked
     const totalNightsBooked = data.reduce((sum, row) => sum + (Number(row.nights) || 0), 0);
@@ -178,7 +273,21 @@ const RentalDashboard = () => {
     };
   };
 
-  const calculateKPIs = () => {
+  const calculateKPIs = (): {
+  totalGross: number;
+  occupancyRate: number;
+  avgNightlyRate: number;
+  totalNights: number;
+  netIncome: number;
+  trends: {
+    revenue: number;
+    nights: number;
+    occupancy: number;
+    nightly: number;
+    netIncome: number;
+  };
+  trendPeriod: string;
+} => {
     const totalGross = processedData.reduce((sum, row) => sum + (Number(row.gross) || 0), 0);
     const totalNights = processedData.reduce((sum, row) => sum + (Number(row.nights) || 0), 0);
     const occupancyRate = calculateOccupancy(processedData);
@@ -190,20 +299,24 @@ const RentalDashboard = () => {
 
     if (selectedYear !== 'all') {
       // Get previous year data maintaining the same apartment filter
-      const previousYearData = Object.values(filteredByApartment)
-        .flat()
-        .filter(row => String(row?.year) === String(Number(selectedYear) - 1));
+      const previousYearData = Object.values(filteredByApartment) // Changed from data to filteredByApartment
+  .flat()
+  .filter(row => String(row?.year) === String(Number(selectedYear) - 1));
       
+        console.log('Current data:', processedData);
+        console.log('Previous year data:', previousYearData);
+  
       trends = calculateTrends(processedData, previousYearData);
+        console.log('Calculated trends:', trends);
       trendPeriod = `vs ${Number(selectedYear) - 1}`;
     } else {
       // For all-time view, compare last 6 months vs previous 6 months
       // First sort the data by date while maintaining apartment filter
-      const allData = Object.values(filteredByApartment).flat().sort((a, b) => {
-        const dateA = getDateFromRow(a);
-        const dateB = getDateFromRow(b);
-        return Number(dateB) - Number(dateA);
-      });
+const allData = Object.values(filteredByApartment).flat().sort((a, b) => {
+  const dateA = getDateFromRow(a);
+  const dateB = getDateFromRow(b);
+  return Number(dateB) - Number(dateA); // Explicitly convert to numbers
+});
 
       const last6Months = allData.slice(0, 6);
       const previous6Months = allData.slice(6, 12);
@@ -269,41 +382,56 @@ const RentalDashboard = () => {
         </div>
       </div>
 
-      {/* Tab Navigation */}
-      <div className="flex border-b border-gray-200 mb-6">
-        <button 
-          onClick={() => setActiveTab('dashboard')}
-          className={`px-6 py-3 font-medium border-b-2 -mb-px transition-colors ${
-            activeTab === 'dashboard' 
-              ? 'border-blue-500 text-blue-600' 
-              : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-          }`}
-        >
-          Dashboard
-        </button>
-        <button 
-          onClick={() => setActiveTab('analytics')}
-          className={`px-6 py-3 font-medium border-b-2 -mb-px transition-colors ${
-            activeTab === 'analytics' 
-              ? 'border-blue-500 text-blue-600' 
-              : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-          }`}
-        >
-          Advanced Analytics
-        </button>
-      </div>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+  <StatsCard
+    icon={DollarSign}
+    title="Total Revenue"
+    value={`€${Math.round(kpis.totalGross).toLocaleString()}`}
+    secondaryValue={`€${Math.round(kpis.netIncome).toLocaleString()}`}
+    trend={kpis.trends.revenue.toFixed(1)}
+    period={selectedYear === 'all' ? 'All time' : String(selectedYear)}
+    info={`Shows revenue trends ${kpis.trendPeriod}. Total revenue includes all bookings and additional services, with net income calculated after expenses and fees.`}
+  />
+  <StatsCard
+    icon={Calendar}
+    title="Total Nights"
+    value={kpis.totalNights.toLocaleString()}
+    subtitle="Nights booked"
+    trend={kpis.trends.nights.toFixed(1)}
+    period={selectedYear === 'all' ? 'All time' : String(selectedYear)}
+    info={`Shows booking trends ${kpis.trendPeriod}. Represents total nights booked for the selected properties.`}
+  />
+  <StatsCard
+    icon={Percent}
+    title="Occupancy Rate"
+    value={`${Math.round(kpis.occupancyRate)}%`}
+    subtitle="Average occupancy"
+    trend={kpis.trends.occupancy.toFixed(1)}
+    period={selectedYear === 'all' ? 'All time' : String(selectedYear)}
+    info={`Shows occupancy trends ${kpis.trendPeriod}. Calculated as percentage of available nights that were booked.`}
+  />
+  <StatsCard
+    icon={TrendingUp}
+    title="Avg. Nightly Rate"
+    value={`€${Math.round(kpis.avgNightlyRate)}`}
+    subtitle="Per night average"
+    trend={kpis.trends.nightly.toFixed(1)}
+    period={selectedYear === 'all' ? 'All time' : String(selectedYear)}
+    info={`Shows pricing trends ${kpis.trendPeriod}. Represents average revenue earned per booked night.`}
+  />
+</div>
 
-      {/* Content based on selected tab */}
-      {activeTab === 'dashboard' ? (
-        <DashboardView 
-          data={filteredData} 
-          kpis={kpis} 
-          selectedYear={selectedYear}
-          trendPeriod={kpis.trendPeriod}
-        />
-      ) : (
-        <AnalyticsView data={filteredData} />
-      )}
+<div className="space-y-6">
+  <MonthlyComparison data={filteredData} />
+  <YearOverYearComparison data={filteredData} />
+  <SeasonalAnalysisWidget data={filteredData} />
+</div>
+      <ApartmentComparisonWidgets data={filteredData} />
+      <div className="space-y-6">
+        <GrossNetIncomeWidget data={filteredData} />
+        <ExpenseBreakdownWidget data={filteredData} />
+        <IncomeExpenseTable />
+      </div>
     </div>
   );
 };
