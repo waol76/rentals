@@ -22,10 +22,11 @@ export default function SignInButton() {
 const handleSignOut = async () => {
   console.log('Sign out button clicked');
   try {
-    await signOut({ 
-      callbackUrl: '/',
-      redirect: true 
-    });
+await signIn('google', { 
+  callbackUrl: '/',
+  redirect: true,
+  prompt: 'select_account'  // Add this line
+});
   } catch (error) {
     console.error('Sign out error:', error);
   }
