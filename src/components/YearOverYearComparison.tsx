@@ -113,10 +113,11 @@ const YearOverYearComparison: React.FC<YearOverYearComparisonProps> = ({ data })
           currentValue = currentCount > 0 ? (currentRelaxing + currentLovely) / currentCount : 0;
           previousValue = previousCount > 0 ? (previousRelaxing + previousLovely) / previousCount : 0;
         } else if (selectedMetric === 'avgPrice') {
-          currentValue = (currentYear.RelaxingAvgPrice || 0 + currentYear.LovelyAvgPrice || 0) / 
-            ((currentYear.RelaxingAvgPrice ? 1 : 0) + (currentYear.LovelyAvgPrice ? 1 : 0) || 1);
-          previousValue = (previousYear.RelaxingAvgPrice || 0 + previousYear.LovelyAvgPrice || 0) / 
-            ((previousYear.RelaxingAvgPrice ? 1 : 0) + (previousYear.LovelyAvgPrice ? 1 : 0) || 1);
+          // Fixed the parentheses issue here
+          currentValue = ((currentYear.RelaxingAvgPrice || 0) + (currentYear.LovelyAvgPrice || 0)) / 
+            (((currentYear.RelaxingAvgPrice ? 1 : 0) + (currentYear.LovelyAvgPrice ? 1 : 0)) || 1);
+          previousValue = ((previousYear.RelaxingAvgPrice || 0) + (previousYear.LovelyAvgPrice || 0)) / 
+            (((previousYear.RelaxingAvgPrice ? 1 : 0) + (previousYear.LovelyAvgPrice ? 1 : 0)) || 1);
         }
       } else {
         // Single property
