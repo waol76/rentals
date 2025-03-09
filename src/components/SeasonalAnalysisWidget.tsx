@@ -18,6 +18,9 @@ const seasonDefinitions = {
   'Fall': ['September', 'October', 'November']
 };
 
+// List of season names
+const seasonNames = ['Winter', 'Spring', 'Summer', 'Fall'];
+
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 const SeasonalAnalysisWidget: React.FC<SeasonalAnalysisProps> = ({ data }) => {
@@ -54,7 +57,7 @@ const SeasonalAnalysisWidget: React.FC<SeasonalAnalysisProps> = ({ data }) => {
     
     // Initialize seasonal data structure
     const seasonalData: Record<string, any> = {};
-    seasons.forEach(season => {
+    seasonNames.forEach(season => {
       seasonalData[season] = {
         season,
         relaxingGross: 0,
@@ -149,7 +152,6 @@ const SeasonalAnalysisWidget: React.FC<SeasonalAnalysisProps> = ({ data }) => {
   };
   
   const formattedData = getMetricValues(chartData);
-  const seasons = ['Winter', 'Spring', 'Summer', 'Fall'];
   
   // Format the tooltip values based on the metric
   const formatTooltipValue = (value: number) => {
