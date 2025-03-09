@@ -8,6 +8,8 @@ import { useEffect, useState } from 'react';
 const allowedEmails = [
   'waol76@gmail.com',
   'catua81@gmail.com',
+  'leonardoberti011@gmail.com',
+  'bertimario17@gmail.com',
   // Add more authorized emails as needed
 ];
 
