@@ -22,6 +22,9 @@ import GrossNetIncomeWidget from '@/components/GrossNetIncomeWidget';
 import ExpenseBreakdownWidget from '@/components/ExpenseBreakdownWidget';
 import IncomeExpenseTable from '@/components/IncomeExpenseTable';
 import ApartmentComparisonWidgets from '@/components/ApartmentComparisonWidgets';
+import MonthlyComparison from '@/components/MonthlyComparison';
+import YearOverYearComparison from '@/components/YearOverYearComparison';
+import SeasonalAnalysisWidget from '@/components/SeasonalAnalysisWidget';
 
 interface RentalData {
   month: MonthName;
@@ -416,6 +419,12 @@ const allData = Object.values(filteredByApartment).flat().sort((a, b) => {
     period={selectedYear === 'all' ? 'All time' : String(selectedYear)}
     info={`Shows pricing trends ${kpis.trendPeriod}. Represents average revenue earned per booked night.`}
   />
+</div>
+
+<div className="space-y-6">
+  <MonthlyComparison data={filteredData} />
+  <YearOverYearComparison data={filteredData} />
+  <SeasonalAnalysisWidget data={filteredData} />
 </div>
       <ApartmentComparisonWidgets data={filteredData} />
       <div className="space-y-6">
