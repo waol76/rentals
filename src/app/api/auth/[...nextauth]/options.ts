@@ -17,7 +17,7 @@ export const options: NextAuthOptions = {
   ],
   callbacks: {
     async signIn({ user }) {
-      // Only allow sign-in if the user's email is in the allowedEmails list
+      // Simply return true or false based on email - avoid custom redirect URLs
       return user.email ? allowedEmails.includes(user.email) : false;
     },
     async jwt({ token, user, account }) {
@@ -45,10 +45,11 @@ export const options: NextAuthOptions = {
       return session
     }
   },
+  // Remove custom pages to avoid redirection issues
   session: {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   secret: process.env.NEXTAUTH_SECRET,
-  debug: process.env.NODE_ENV === "development",
+  debug: false,
 }
