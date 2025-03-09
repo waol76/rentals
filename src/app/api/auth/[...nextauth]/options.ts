@@ -17,16 +17,9 @@ export const options: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async signIn({ user, account, profile }) {
-      // Check if the user's email is allowed
-      const isAllowedEmail = user.email ? allowedEmails.includes(user.email) : false;
-      
-      if (!isAllowedEmail) {
-        // Instead of just returning false, return a specific error path
-        return `/auth/error?error=AccessDenied&email=${encodeURIComponent(user.email || '')}`;
-      }
-      
-      return true;
+    async signIn({ user }) {
+      // Simply return true or false based on email - avoid custom redirect URLs
+      return user.email ? allowedEmails.includes(user.email) : false;
     },
     async jwt({ token, user, account }) {
       if (account && user) {
@@ -53,14 +46,11 @@ export const options: NextAuthOptions = {
       return session
     }
   },
-  pages: {
-    error: '/auth/error',
-    signIn: '/api/auth/signin',
-  },
+  // Remove custom pages to avoid redirection issues
   session: {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   secret: process.env.NEXTAUTH_SECRET,
-  debug: true, // Enable debug for troubleshooting
+  debug: false,
 }
