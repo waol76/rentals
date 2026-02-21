@@ -45,11 +45,12 @@ export async function GET() {
             return acc;
           }, {});
 
-          const gross = parseValue(rowData['Gross Income']);
+          const grossFromSheet = parseValue(rowData['Gross Income']);
 
-          // Cleaning is paid by guests — not an owner expense.
-          // We track it for display but exclude it from net income calc.
+          // Cleaning is paid by guests — it's revenue on top of rental price.
+          // Must be added to gross to get true total revenue.
           const cleaning = parseValue(rowData['Cleaning'] || rowData['cleaning']);
+          const gross = grossFromSheet + cleaning;
 
           const expenses = {
             commissions: parseValue(rowData['Commissions (Booking, AirBnB)']),
@@ -61,7 +62,7 @@ export async function GET() {
             extra: parseValue(rowData['Extra']),
           };
 
-          // Calculate total expenses (cleaning excluded — covered by guests)
+          // Calculate total expenses (cleaning is not an expense — it's guest-paid revenue)
           const totalExpenses = Object.values(expenses)
             .filter((val) => !isNaN(val))
             .reduce((sum, val) => sum + val, 0);
@@ -72,7 +73,7 @@ export async function GET() {
             nights: parseInt(rowData['Nights']) || 0,
             gross,
             net: gross + totalExpenses, // expenses are already negative
-            cleaning, // tracked separately for display
+            cleaning, // tracked for display (already included in gross)
             ...expenses,
           };
         } catch (err) {
