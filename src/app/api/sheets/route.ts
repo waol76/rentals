@@ -46,10 +46,14 @@ export async function GET() {
           }, {});
 
           const gross = parseValue(rowData['Gross Income']);
+
+          // Cleaning is paid by guests — not an owner expense.
+          // We track it for display but exclude it from net income calc.
+          const cleaning = parseValue(rowData['Cleaning'] || rowData['cleaning']);
+
           const expenses = {
             commissions: parseValue(rowData['Commissions (Booking, AirBnB)']),
             management: parseValue(rowData['Property Management']),
-            cleaning: parseValue(rowData['Cleaning'] || rowData['cleaning']),
             internet: parseValue(rowData['Internet']),
             electricity: parseValue(rowData['Electricity']),
             water: parseValue(rowData['Water']),
@@ -57,9 +61,9 @@ export async function GET() {
             extra: parseValue(rowData['Extra']),
           };
 
-          // Safely calculate total expenses and net
+          // Calculate total expenses (cleaning excluded — covered by guests)
           const totalExpenses = Object.values(expenses)
-            .filter((val) => !isNaN(val)) // Exclude invalid numbers
+            .filter((val) => !isNaN(val))
             .reduce((sum, val) => sum + val, 0);
 
           return {
@@ -67,7 +71,8 @@ export async function GET() {
             year: rowData['Year']?.trim(),
             nights: parseInt(rowData['Nights']) || 0,
             gross,
-            net: gross + totalExpenses, // Add total expenses (already negative) to gross
+            net: gross + totalExpenses, // expenses are already negative
+            cleaning, // tracked separately for display
             ...expenses,
           };
         } catch (err) {

@@ -5,7 +5,6 @@ import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recha
 interface ExpenseCategories {
  commissions: number;
  management: number;
- cleaning: number;
  internet: number;
  electricity: number;
  water: number;
@@ -25,15 +24,16 @@ const ExpenseBreakdownWidget = ({ data }: { data: Record<string, any[]> }) => {
  const COLORS = ['#4ade80', '#f87171', '#60a5fa', '#fbbf24', '#a78bfa', '#34d399', '#fb923c', '#f472b6'];
 
 const calculateFinancials = () => {
-  const expenses = Object.values(data).flat().reduce(
+  const result = Object.values(data).flat().reduce(
     (acc, row) => {
       if (!row) return acc;
-      
+
       const grossIncome = Math.abs(Number(row.gross) || 0);
+      // Cleaning is paid by guests — tracked separately, not an expense
+      const cleaningAmount = Math.abs(Number(row.cleaning) || 0);
       const expenseCategories: ExpenseCategories = {
         commissions: Math.abs(Number(row.commissions) || 0),
         management: Math.abs(Number(row.management) || 0),
-        cleaning: Math.abs(Number(row.cleaning) || 0),
         internet: Math.abs(Number(row.internet) || 0),
         electricity: Math.abs(Number(row.electricity) || 0),
         water: Math.abs(Number(row.water) || 0),
@@ -43,29 +43,31 @@ const calculateFinancials = () => {
 
       return {
         grossIncome: acc.grossIncome + grossIncome,
+        cleaning: acc.cleaning + cleaningAmount,
         ...Object.keys(expenseCategories).reduce((expAcc, key) => ({
           ...expAcc,
           [key]: (acc[key] || 0) + expenseCategories[key as keyof ExpenseCategories]
         }), {})
       };
     },
-    { grossIncome: 0 }
+    { grossIncome: 0, cleaning: 0 }
   );
 
-  const totalExpenses = Object.entries(expenses)
-    .filter(([key]) => key !== 'grossIncome')
+  const totalExpenses = Object.entries(result)
+    .filter(([key]) => key !== 'grossIncome' && key !== 'cleaning')
     .reduce((sum, [, value]) => sum + (value as number), 0);
 
-  const netIncome = expenses.grossIncome - totalExpenses;
+  const netIncome = result.grossIncome - totalExpenses;
 
   return {
-    expenses,
+    expenses: result,
     totalExpenses,
-    netIncome
+    netIncome,
+    totalCleaning: result.cleaning
   };
 };
 
- const { expenses, totalExpenses, netIncome } = calculateFinancials();
+ const { expenses, totalExpenses, netIncome, totalCleaning } = calculateFinancials();
 
  const incomeVsExpensesData = [
    { name: 'Net Income', value: netIncome },
@@ -73,7 +75,7 @@ const calculateFinancials = () => {
  ].filter(item => item.value > 0);
 
 const expenseBreakdownData: Expense[] = Object.entries(expenses)
-  .filter(([key]) => key !== 'grossIncome')
+  .filter(([key]) => key !== 'grossIncome' && key !== 'cleaning')
   .map(([name, value]) => ({
     name: name.charAt(0).toUpperCase() + name.slice(1),
     value: value as number
@@ -111,7 +113,7 @@ const expenseBreakdownData: Expense[] = Object.entries(expenses)
              </PieChart>
            </ResponsiveContainer>
          </div>
-         <div className="mt-4 grid grid-cols-2 gap-4">
+         <div className="mt-4 grid grid-cols-3 gap-4">
            <div className="text-center p-4 bg-gray-50 rounded-lg">
              <p className="text-sm text-gray-600">Total Revenue</p>
              <p className="text-xl font-bold text-green-600">
@@ -122,6 +124,12 @@ const expenseBreakdownData: Expense[] = Object.entries(expenses)
              <p className="text-sm text-gray-600">Net Income</p>
              <p className="text-xl font-bold text-blue-600">
                €{Math.round(netIncome).toLocaleString()}
+             </p>
+           </div>
+           <div className="text-center p-4 bg-gray-50 rounded-lg">
+             <p className="text-sm text-gray-600">Cleaning (guest-paid)</p>
+             <p className="text-xl font-bold text-gray-500">
+               €{Math.round(totalCleaning).toLocaleString()}
              </p>
            </div>
          </div>
