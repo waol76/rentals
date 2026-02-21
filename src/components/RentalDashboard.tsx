@@ -41,6 +41,7 @@ const getDateFromRow = (row: RentalData): Date => {
 
 const RentalDashboard = () => {
   const [data, setData] = useState<DataStructure | null>(null);
+  const [platformData, setPlatformData] = useState<Record<string, Record<string, any>> | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState('both');
@@ -52,8 +53,9 @@ const RentalDashboard = () => {
       try {
         const response = await fetch('/api/sheets');
         if (!response.ok) throw new Error(`Failed to fetch data: ${response.statusText}`);
-        const { data } = await response.json();
-        setData(data);
+        const result = await response.json();
+        setData(result.data);
+        setPlatformData(result.platformData || null);
       } catch (err) {
         console.error('Error fetching data:', err);
         setError('Failed to fetch data from Google Sheets.');
@@ -295,11 +297,12 @@ const RentalDashboard = () => {
 
       {/* Content based on selected tab */}
       {activeTab === 'dashboard' ? (
-        <DashboardView 
-          data={filteredData} 
-          kpis={kpis} 
+        <DashboardView
+          data={filteredData}
+          kpis={kpis}
           selectedYear={selectedYear}
           trendPeriod={kpis.trendPeriod}
+          platformData={platformData}
         />
       ) : (
         <AnalyticsView data={filteredData} />

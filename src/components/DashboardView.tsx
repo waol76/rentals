@@ -5,19 +5,22 @@ import { StatsCard } from './StatsCard';
 import ApartmentComparisonWidgets from './ApartmentComparisonWidgets';
 import GrossNetIncomeWidget from './GrossNetIncomeWidget';
 import ExpenseBreakdownWidget from './ExpenseBreakdownWidget';
+import PlatformSplitWidget from './PlatformSplitWidget';
 
 interface DashboardViewProps {
   data: any;
   kpis: any;
   selectedYear: 'all' | number;
   trendPeriod: string;
+  platformData: Record<string, Record<string, any>> | null;
 }
 
-const DashboardView: React.FC<DashboardViewProps> = ({ 
-  data, 
-  kpis, 
+const DashboardView: React.FC<DashboardViewProps> = ({
+  data,
+  kpis,
   selectedYear,
-  trendPeriod
+  trendPeriod,
+  platformData
 }) => {
   return (
     <div className="space-y-6">
@@ -64,6 +67,9 @@ const DashboardView: React.FC<DashboardViewProps> = ({
       {/* Apartment comparison */}
       <ApartmentComparisonWidgets data={data} />
       
+      {/* Platform split */}
+      {platformData && <PlatformSplitWidget platformData={platformData} selectedYear={selectedYear} />}
+
       {/* Income and expense widgets */}
       <div className="space-y-6">
         <GrossNetIncomeWidget data={data} />

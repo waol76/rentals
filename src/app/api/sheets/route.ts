@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { google } from 'googleapis';
+import platformData from '@/data/platformData.json';
 
 const parseValue = (value: string): number => {
   const cleanedValue = String(value || '0').replace(/[^0-9.-]/g, '');
@@ -79,7 +80,7 @@ export async function GET() {
     }
 
     console.log('Processed Sheet Data:', sheetData); // Final processed data
-    return NextResponse.json({ data: sheetData });
+    return NextResponse.json({ data: sheetData, platformData });
   } catch (error) {
     console.error('Error fetching data from Google Sheets:', error);
     return NextResponse.json(

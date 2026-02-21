@@ -1,0 +1,486 @@
+{
+  "Relaxing": {
+    "April 2024": {
+      "bookingRevenue": 1550.0,
+      "airbnbRevenue": 0,
+      "directRevenue": 0,
+      "bookingCommissions": 30.78,
+      "airbnbCommissions": 0,
+      "bookingNights": 18,
+      "airbnbNights": 0,
+      "directNights": 0
+    },
+    "May 2024": {
+      "bookingRevenue": 2600.72,
+      "airbnbRevenue": 0,
+      "directRevenue": 0,
+      "bookingCommissions": 292.44,
+      "airbnbCommissions": 0,
+      "bookingNights": 29,
+      "airbnbNights": 0,
+      "directNights": 0
+    },
+    "June 2024": {
+      "bookingRevenue": 2293.94,
+      "airbnbRevenue": 0,
+      "directRevenue": 0,
+      "bookingCommissions": 490.54,
+      "airbnbCommissions": 0,
+      "bookingNights": 26,
+      "airbnbNights": 0,
+      "directNights": 0
+    },
+    "July 2024": {
+      "bookingRevenue": 1275.9,
+      "airbnbRevenue": 783.2,
+      "directRevenue": 0,
+      "bookingCommissions": 273.48,
+      "airbnbCommissions": 147.96,
+      "bookingNights": 13,
+      "airbnbNights": 9,
+      "directNights": 0
+    },
+    "August 2024": {
+      "bookingRevenue": 3127.71,
+      "airbnbRevenue": 493.6,
+      "directRevenue": 0,
+      "bookingCommissions": 634.25,
+      "airbnbCommissions": 101.21,
+      "bookingNights": 24,
+      "airbnbNights": 3,
+      "directNights": 0
+    },
+    "September 2024": {
+      "bookingRevenue": 2109.5,
+      "airbnbRevenue": 0,
+      "directRevenue": 0,
+      "bookingCommissions": 435.89,
+      "airbnbCommissions": 0,
+      "bookingNights": 26,
+      "airbnbNights": 0,
+      "directNights": 0
+    },
+    "October 2024": {
+      "bookingRevenue": 2493.5,
+      "airbnbRevenue": 0,
+      "directRevenue": 0,
+      "bookingCommissions": 529.64,
+      "airbnbCommissions": 0,
+      "bookingNights": 35,
+      "airbnbNights": 0,
+      "directNights": 0
+    },
+    "November 2024": {
+      "bookingRevenue": 1219.41,
+      "airbnbRevenue": 0,
+      "directRevenue": 0,
+      "bookingCommissions": 258.16,
+      "airbnbCommissions": 0,
+      "bookingNights": 19,
+      "airbnbNights": 0,
+      "directNights": 0
+    },
+    "December 2024": {
+      "bookingRevenue": 2179.28,
+      "airbnbRevenue": 0,
+      "directRevenue": 0,
+      "bookingCommissions": 453.38,
+      "airbnbCommissions": 0,
+      "bookingNights": 24,
+      "airbnbNights": 0,
+      "directNights": 0
+    },
+    "January 2025": {
+      "bookingRevenue": 934.85,
+      "airbnbRevenue": 348.0,
+      "directRevenue": 0,
+      "bookingCommissions": 203.33,
+      "airbnbCommissions": 68.97,
+      "bookingNights": 18,
+      "airbnbNights": 6,
+      "directNights": 0
+    },
+    "February 2025": {
+      "bookingRevenue": 1159.92,
+      "airbnbRevenue": 0,
+      "directRevenue": 0,
+      "bookingCommissions": 254.02,
+      "airbnbCommissions": 0,
+      "bookingNights": 17,
+      "airbnbNights": 0,
+      "directNights": 0
+    },
+    "March 2025": {
+      "bookingRevenue": 1089.68,
+      "airbnbRevenue": 0,
+      "directRevenue": 0,
+      "bookingCommissions": 246.49,
+      "airbnbCommissions": 0,
+      "bookingNights": 16,
+      "airbnbNights": 0,
+      "directNights": 0
+    },
+    "April 2025": {
+      "bookingRevenue": 2118.96,
+      "airbnbRevenue": 0,
+      "directRevenue": 0,
+      "bookingCommissions": 462.12,
+      "airbnbCommissions": 0,
+      "bookingNights": 27,
+      "airbnbNights": 0,
+      "directNights": 0
+    },
+    "May 2025": {
+      "bookingRevenue": 2936.96,
+      "airbnbRevenue": 120.0,
+      "directRevenue": 0,
+      "bookingCommissions": 623.41,
+      "airbnbCommissions": 27.59,
+      "bookingNights": 34,
+      "airbnbNights": 2,
+      "directNights": 0
+    },
+    "June 2025": {
+      "bookingRevenue": 2237.96,
+      "airbnbRevenue": 0,
+      "directRevenue": 0.0,
+      "bookingCommissions": 485.57,
+      "airbnbCommissions": 0,
+      "bookingNights": 25,
+      "airbnbNights": 0,
+      "directNights": 1
+    },
+    "July 2025": {
+      "bookingRevenue": 3665.99,
+      "airbnbRevenue": 0,
+      "directRevenue": 0,
+      "bookingCommissions": 754.61,
+      "airbnbCommissions": 0,
+      "bookingNights": 30,
+      "airbnbNights": 0,
+      "directNights": 0
+    },
+    "August 2025": {
+      "bookingRevenue": 3939.54,
+      "airbnbRevenue": 0,
+      "directRevenue": 0,
+      "bookingCommissions": 821.17,
+      "airbnbCommissions": 0,
+      "bookingNights": 29,
+      "airbnbNights": 0,
+      "directNights": 0
+    },
+    "September 2025": {
+      "bookingRevenue": 2991.01,
+      "airbnbRevenue": 174.0,
+      "directRevenue": 0,
+      "bookingCommissions": 634.09,
+      "airbnbCommissions": 37.39,
+      "bookingNights": 31,
+      "airbnbNights": 2,
+      "directNights": 0
+    },
+    "October 2025": {
+      "bookingRevenue": 1999.24,
+      "airbnbRevenue": 0,
+      "directRevenue": 0,
+      "bookingCommissions": 438.49,
+      "airbnbCommissions": 0,
+      "bookingNights": 27,
+      "airbnbNights": 0,
+      "directNights": 0
+    },
+    "November 2025": {
+      "bookingRevenue": 1327.73,
+      "airbnbRevenue": 0,
+      "directRevenue": 0,
+      "bookingCommissions": 294.61,
+      "airbnbCommissions": 0,
+      "bookingNights": 23,
+      "airbnbNights": 0,
+      "directNights": 0
+    },
+    "December 2025": {
+      "bookingRevenue": 2089.61,
+      "airbnbRevenue": 0,
+      "directRevenue": 0,
+      "bookingCommissions": 444.87,
+      "airbnbCommissions": 0,
+      "bookingNights": 22,
+      "airbnbNights": 0,
+      "directNights": 0
+    },
+    "January 2026": {
+      "bookingRevenue": 557.58,
+      "airbnbRevenue": 508.0,
+      "directRevenue": 0,
+      "bookingCommissions": 137.59,
+      "airbnbCommissions": 101.85,
+      "bookingNights": 10,
+      "airbnbNights": 7,
+      "directNights": 0
+    },
+    "February 2026": {
+      "bookingRevenue": 1220.7,
+      "airbnbRevenue": 0,
+      "directRevenue": 0,
+      "bookingCommissions": 268.37,
+      "airbnbCommissions": 0,
+      "bookingNights": 19,
+      "airbnbNights": 0,
+      "directNights": 0
+    },
+    "March 2026": {
+      "bookingRevenue": 445.3,
+      "airbnbRevenue": 0,
+      "directRevenue": 0,
+      "bookingCommissions": 94.73,
+      "airbnbCommissions": 0,
+      "bookingNights": 7,
+      "airbnbNights": 0,
+      "directNights": 0
+    }
+  },
+  "Lovely": {
+    "April 2024": {
+      "bookingRevenue": 2057.5,
+      "airbnbRevenue": 0,
+      "directRevenue": 0,
+      "bookingCommissions": 0.0,
+      "airbnbCommissions": 0,
+      "bookingNights": 24,
+      "airbnbNights": 0,
+      "directNights": 0
+    },
+    "May 2024": {
+      "bookingRevenue": 2072.74,
+      "airbnbRevenue": 0,
+      "directRevenue": 0,
+      "bookingCommissions": 441.2,
+      "airbnbCommissions": 0,
+      "bookingNights": 24,
+      "airbnbNights": 0,
+      "directNights": 0
+    },
+    "June 2024": {
+      "bookingRevenue": 2183.67,
+      "airbnbRevenue": 0,
+      "directRevenue": 0,
+      "bookingCommissions": 456.6,
+      "airbnbCommissions": 0,
+      "bookingNights": 22,
+      "airbnbNights": 0,
+      "directNights": 0
+    },
+    "July 2024": {
+      "bookingRevenue": 2553.21,
+      "airbnbRevenue": 285.6,
+      "directRevenue": 0,
+      "bookingCommissions": 522.31,
+      "airbnbCommissions": 57.64,
+      "bookingNights": 23,
+      "airbnbNights": 3,
+      "directNights": 0
+    },
+    "August 2024": {
+      "bookingRevenue": 3468.74,
+      "airbnbRevenue": 81.2,
+      "directRevenue": 0,
+      "bookingCommissions": 706.88,
+      "airbnbCommissions": 20.55,
+      "bookingNights": 28,
+      "airbnbNights": 1,
+      "directNights": 0
+    },
+    "September 2024": {
+      "bookingRevenue": 1701.08,
+      "airbnbRevenue": 316.8,
+      "directRevenue": 0,
+      "bookingCommissions": 362.56,
+      "airbnbCommissions": 63.31,
+      "bookingNights": 21,
+      "airbnbNights": 4,
+      "directNights": 0
+    },
+    "October 2024": {
+      "bookingRevenue": 2408.18,
+      "airbnbRevenue": 0,
+      "directRevenue": 0,
+      "bookingCommissions": 508.72,
+      "airbnbCommissions": 0,
+      "bookingNights": 31,
+      "airbnbNights": 0,
+      "directNights": 0
+    },
+    "November 2024": {
+      "bookingRevenue": 1108.8,
+      "airbnbRevenue": 0,
+      "directRevenue": 0,
+      "bookingCommissions": 235.44,
+      "airbnbCommissions": 0,
+      "bookingNights": 15,
+      "airbnbNights": 0,
+      "directNights": 0
+    },
+    "December 2024": {
+      "bookingRevenue": 1725.59,
+      "airbnbRevenue": 0,
+      "directRevenue": 194.4,
+      "bookingCommissions": 357.46,
+      "airbnbCommissions": 0,
+      "bookingNights": 21,
+      "airbnbNights": 0,
+      "directNights": 3
+    },
+    "January 2025": {
+      "bookingRevenue": 1272.26,
+      "airbnbRevenue": 0,
+      "directRevenue": 0,
+      "bookingCommissions": 276.18,
+      "airbnbCommissions": 0,
+      "bookingNights": 25,
+      "airbnbNights": 0,
+      "directNights": 0
+    },
+    "February 2025": {
+      "bookingRevenue": 1252.8,
+      "airbnbRevenue": 0,
+      "directRevenue": 0,
+      "bookingCommissions": 272.33,
+      "airbnbCommissions": 0,
+      "bookingNights": 19,
+      "airbnbNights": 0,
+      "directNights": 0
+    },
+    "March 2025": {
+      "bookingRevenue": 2142.82,
+      "airbnbRevenue": 0,
+      "directRevenue": 0,
+      "bookingCommissions": 454.2,
+      "airbnbCommissions": 0,
+      "bookingNights": 26,
+      "airbnbNights": 0,
+      "directNights": 0
+    },
+    "April 2025": {
+      "bookingRevenue": 2244.01,
+      "airbnbRevenue": 0,
+      "directRevenue": 0,
+      "bookingCommissions": 486.77,
+      "airbnbCommissions": 0,
+      "bookingNights": 25,
+      "airbnbNights": 0,
+      "directNights": 0
+    },
+    "May 2025": {
+      "bookingRevenue": 2605.31,
+      "airbnbRevenue": 0,
+      "directRevenue": 0,
+      "bookingCommissions": 564.3,
+      "airbnbCommissions": 0,
+      "bookingNights": 30,
+      "airbnbNights": 0,
+      "directNights": 0
+    },
+    "June 2025": {
+      "bookingRevenue": 2947.21,
+      "airbnbRevenue": 244.0,
+      "directRevenue": 0,
+      "bookingCommissions": 638.09,
+      "airbnbCommissions": 50.09,
+      "bookingNights": 32,
+      "airbnbNights": 3,
+      "directNights": 0
+    },
+    "July 2025": {
+      "bookingRevenue": 3105.52,
+      "airbnbRevenue": 0,
+      "directRevenue": 0,
+      "bookingCommissions": 675.63,
+      "airbnbCommissions": 0,
+      "bookingNights": 28,
+      "airbnbNights": 0,
+      "directNights": 0
+    },
+    "August 2025": {
+      "bookingRevenue": 3611.78,
+      "airbnbRevenue": 598.0,
+      "directRevenue": 0,
+      "bookingCommissions": 756.53,
+      "airbnbCommissions": 120.15,
+      "bookingNights": 28,
+      "airbnbNights": 4,
+      "directNights": 0
+    },
+    "September 2025": {
+      "bookingRevenue": 2900.6,
+      "airbnbRevenue": 0,
+      "directRevenue": 0,
+      "bookingCommissions": 616.26,
+      "airbnbCommissions": 0,
+      "bookingNights": 30,
+      "airbnbNights": 0,
+      "directNights": 0
+    },
+    "October 2025": {
+      "bookingRevenue": 2211.55,
+      "airbnbRevenue": 0,
+      "directRevenue": 0,
+      "bookingCommissions": 499.3,
+      "airbnbCommissions": 0,
+      "bookingNights": 28,
+      "airbnbNights": 0,
+      "directNights": 0
+    },
+    "November 2025": {
+      "bookingRevenue": 1598.28,
+      "airbnbRevenue": 260.0,
+      "directRevenue": 0,
+      "bookingCommissions": 347.39,
+      "airbnbCommissions": 54.76,
+      "bookingNights": 24,
+      "airbnbNights": 4,
+      "directNights": 0
+    },
+    "December 2025": {
+      "bookingRevenue": 2117.07,
+      "airbnbRevenue": 0,
+      "directRevenue": 0,
+      "bookingCommissions": 443.98,
+      "airbnbCommissions": 0,
+      "bookingNights": 28,
+      "airbnbNights": 0,
+      "directNights": 0
+    },
+    "January 2026": {
+      "bookingRevenue": 1419.83,
+      "airbnbRevenue": 171.0,
+      "directRevenue": 0,
+      "bookingCommissions": 314.55,
+      "airbnbCommissions": 38.64,
+      "bookingNights": 24,
+      "airbnbNights": 3,
+      "directNights": 0
+    },
+    "February 2026": {
+      "bookingRevenue": 793.74,
+      "airbnbRevenue": 432.0,
+      "directRevenue": 0,
+      "bookingCommissions": 170.35,
+      "airbnbCommissions": 87.59,
+      "bookingNights": 13,
+      "airbnbNights": 7,
+      "directNights": 0
+    },
+    "March 2026": {
+      "bookingRevenue": 1041.56,
+      "airbnbRevenue": 0,
+      "directRevenue": 0,
+      "bookingCommissions": 219.24,
+      "airbnbCommissions": 0,
+      "bookingNights": 14,
+      "airbnbNights": 0,
+      "directNights": 0
+    }
+  }
+}
