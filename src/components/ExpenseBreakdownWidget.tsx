@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
 
 interface ExpenseCategories {
  commissions: number;
@@ -12,16 +12,24 @@ interface ExpenseCategories {
  extra: number;
 }
 
-
-interface Expense {
+interface SliceEntry {
   name: string;
   value: number;
+  color: string;
 }
 
-
+const EXPENSE_COLORS: Record<string, string> = {
+  'Net Income': '#22c55e',
+  'Commissions': '#ef4444',
+  'Management': '#f97316',
+  'Internet': '#3b82f6',
+  'Electricity': '#eab308',
+  'Water': '#8b5cf6',
+  'Condominio': '#06b6d4',
+  'Extra': '#ec4899',
+};
 
 const ExpenseBreakdownWidget = ({ data }: { data: Record<string, any[]> }) => {
- const COLORS = ['#4ade80', '#f87171', '#60a5fa', '#fbbf24', '#a78bfa', '#34d399', '#fb923c', '#f472b6'];
 
 const calculateFinancials = () => {
   const result = Object.values(data).flat().reduce(
@@ -29,11 +37,8 @@ const calculateFinancials = () => {
       if (!row) return acc;
 
       const grossIncome = Number(row.gross) || 0;
-      // Use row.net from the API (single source of truth, consistent with KPIs)
       const netValue = Number(row.net) || 0;
-      // Cleaning is paid by guests — tracked separately, not an expense
       const cleaningAmount = Math.abs(Number(row.cleaning) || 0);
-      // Individual expenses for the breakdown pie chart
       const expenseCategories: ExpenseCategories = {
         commissions: Math.abs(Number(row.commissions) || 0),
         management: Math.abs(Number(row.management) || 0),
@@ -57,7 +62,6 @@ const calculateFinancials = () => {
     { grossIncome: 0, netIncome: 0, cleaning: 0 }
   );
 
-  // Total expenses derived from gross - net (consistent with API calculation)
   const totalExpenses = result.grossIncome - result.netIncome;
 
   return {
@@ -70,108 +74,141 @@ const calculateFinancials = () => {
 
  const { expenses, totalExpenses, netIncome, totalCleaning } = calculateFinancials();
 
- const incomeVsExpensesData = [
-   { name: 'Net Income', value: netIncome },
-   { name: 'Total Expenses', value: totalExpenses }
- ].filter(item => item.value > 0);
+ // Single pie: net income + each expense category against total revenue
+ const revenueBreakdown: SliceEntry[] = [
+   { name: 'Net Income', value: netIncome, color: EXPENSE_COLORS['Net Income'] },
+   ...Object.entries(expenses)
+     .filter(([key]) => !['grossIncome', 'netIncome', 'cleaning'].includes(key))
+     .map(([name, value]) => ({
+       name: name.charAt(0).toUpperCase() + name.slice(1),
+       value: value as number,
+       color: EXPENSE_COLORS[name.charAt(0).toUpperCase() + name.slice(1)] || '#94a3b8',
+     }))
+     .filter(item => item.value > 0),
+ ];
 
-const expenseBreakdownData: Expense[] = Object.entries(expenses)
-  .filter(([key]) => key !== 'grossIncome' && key !== 'cleaning')
-  .map(([name, value]) => ({
-    name: name.charAt(0).toUpperCase() + name.slice(1),
-    value: value as number
-  }))
-  .filter((item: Expense) => item.value > 0);
+ // Horizontal bar data for expense categories only
+ const expenseBarData = revenueBreakdown
+   .filter(item => item.name !== 'Net Income')
+   .sort((a, b) => b.value - a.value);
 
  const formatTooltip = (value: number) => `€${Math.round(value).toLocaleString()}`;
- const customLabel = ({ percent }: { percent: number }) => `${(percent * 100).toFixed(0)}%`;
+
+ const profitMargin = expenses.grossIncome > 0
+   ? ((netIncome / expenses.grossIncome) * 100).toFixed(1)
+   : '0';
+
+ const renderCustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, name }: any) => {
+   if (percent < 0.04) return null;
+   const RADIAN = Math.PI / 180;
+   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+   const x = cx + radius * Math.cos(-midAngle * RADIAN);
+   const y = cy + radius * Math.sin(-midAngle * RADIAN);
+   return (
+     <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="central" fontSize={12} fontWeight="bold">
+       {`${(percent * 100).toFixed(0)}%`}
+     </text>
+   );
+ };
 
  return (
-   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-     <Card className="lg:col-span-1">
-       <CardHeader className="pb-2">
-         <CardTitle className="text-xl">Income Distribution</CardTitle>
-       </CardHeader>
-       <CardContent>
-         <div className="h-[400px] flex items-center">
-           <ResponsiveContainer width="100%" height="100%">
-             <PieChart>
-               <Pie
-                 data={incomeVsExpensesData}
-                 dataKey="value"
-                 nameKey="name"
-                 cx="50%"
-                 cy="50%"
-                 outerRadius={150}
-                 label={customLabel}
-               >
-                 {incomeVsExpensesData.map((entry, index) => (
-                   <Cell key={`cell-${index}`} fill={index === 0 ? '#4ade80' : '#f87171'} />
-                 ))}
-               </Pie>
-               <Tooltip formatter={formatTooltip} />
-               <Legend verticalAlign="bottom" height={36} />
-             </PieChart>
-           </ResponsiveContainer>
+   <Card>
+     <CardHeader className="pb-2">
+       <CardTitle className="text-xl">Profit & Loss</CardTitle>
+     </CardHeader>
+     <CardContent>
+       {/* Summary cards */}
+       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+         <div className="text-center p-3 bg-gray-50 rounded-lg">
+           <p className="text-xs text-gray-500">Total Revenue</p>
+           <p className="text-lg font-bold text-gray-900">
+             €{Math.round(expenses.grossIncome).toLocaleString()}
+           </p>
          </div>
-         <div className="mt-4 grid grid-cols-3 gap-4">
-           <div className="text-center p-4 bg-gray-50 rounded-lg">
-             <p className="text-sm text-gray-600">Total Revenue</p>
-             <p className="text-xl font-bold text-green-600">
-               €{Math.round(expenses.grossIncome).toLocaleString()}
-             </p>
-           </div>
-           <div className="text-center p-4 bg-gray-50 rounded-lg">
-             <p className="text-sm text-gray-600">Net Income</p>
-             <p className="text-xl font-bold text-blue-600">
-               €{Math.round(netIncome).toLocaleString()}
-             </p>
-           </div>
-           <div className="text-center p-4 bg-gray-50 rounded-lg">
-             <p className="text-sm text-gray-600">Cleaning (guest-paid)</p>
-             <p className="text-xl font-bold text-gray-500">
-               €{Math.round(totalCleaning).toLocaleString()}
-             </p>
-           </div>
+         <div className="text-center p-3 bg-green-50 rounded-lg">
+           <p className="text-xs text-gray-500">Net Income</p>
+           <p className="text-lg font-bold text-green-600">
+             €{Math.round(netIncome).toLocaleString()}
+           </p>
          </div>
-       </CardContent>
-     </Card>
-
-     <Card className="lg:col-span-1">
-       <CardHeader className="pb-2">
-         <CardTitle className="text-xl">Expense Breakdown</CardTitle>
-       </CardHeader>
-       <CardContent>
-         <div className="h-[400px] flex items-center">
-           <ResponsiveContainer width="100%" height="100%">
-             <PieChart>
-               <Pie
-                 data={expenseBreakdownData}
-                 dataKey="value"
-                 nameKey="name"
-                 cx="50%"
-                 cy="50%"
-                 outerRadius={150}
-                 label={customLabel}
-               >
-                 {expenseBreakdownData.map((entry, index) => (
-                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                 ))}
-               </Pie>
-               <Tooltip formatter={formatTooltip} />
-               <Legend verticalAlign="bottom" height={36} />
-             </PieChart>
-           </ResponsiveContainer>
-         </div>
-         <div className="mt-4 text-center p-4 bg-gray-50 rounded-lg">
-           <p className="text-sm text-gray-600">Total Expenses</p>
-           <p className="text-xl font-bold text-red-600">
+         <div className="text-center p-3 bg-red-50 rounded-lg">
+           <p className="text-xs text-gray-500">Total Expenses</p>
+           <p className="text-lg font-bold text-red-500">
              €{Math.round(totalExpenses).toLocaleString()}
            </p>
          </div>
-       </CardContent>
-     </Card>
-   </div>
+         <div className="text-center p-3 bg-gray-50 rounded-lg">
+           <p className="text-xs text-gray-500">Profit Margin</p>
+           <p className="text-lg font-bold text-gray-700">
+             {profitMargin}%
+           </p>
+         </div>
+       </div>
+
+       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+         {/* Donut: where does every euro go? */}
+         <div>
+           <p className="text-sm font-medium text-gray-500 mb-2 text-center">Where every € goes</p>
+           <div className="h-[350px] flex items-center">
+             <ResponsiveContainer width="100%" height="100%">
+               <PieChart>
+                 <Pie
+                   data={revenueBreakdown}
+                   dataKey="value"
+                   nameKey="name"
+                   cx="50%"
+                   cy="50%"
+                   innerRadius={60}
+                   outerRadius={140}
+                   label={renderCustomLabel}
+                   labelLine={false}
+                 >
+                   {revenueBreakdown.map((entry, index) => (
+                     <Cell key={`cell-${index}`} fill={entry.color} />
+                   ))}
+                 </Pie>
+                 <Tooltip formatter={formatTooltip} />
+                 <Legend
+                   verticalAlign="bottom"
+                   height={50}
+                   formatter={(value: string) => <span className="text-xs">{value}</span>}
+                 />
+               </PieChart>
+             </ResponsiveContainer>
+           </div>
+         </div>
+
+         {/* Horizontal bar: expense breakdown ranked */}
+         <div>
+           <p className="text-sm font-medium text-gray-500 mb-2 text-center">Expense breakdown</p>
+           <div className="h-[350px] flex items-center">
+             <ResponsiveContainer width="100%" height="100%">
+               <BarChart data={expenseBarData} layout="vertical" margin={{ left: 10, right: 30 }}>
+                 <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+                 <XAxis type="number" tickFormatter={(v: number) => `€${(v / 1000).toFixed(0)}k`} />
+                 <YAxis type="category" dataKey="name" width={100} tick={{ fontSize: 12 }} />
+                 <Tooltip formatter={formatTooltip} />
+                 <Bar dataKey="value" radius={[0, 4, 4, 0]}>
+                   {expenseBarData.map((entry, index) => (
+                     <Cell key={`bar-${index}`} fill={entry.color} />
+                   ))}
+                 </Bar>
+               </BarChart>
+             </ResponsiveContainer>
+           </div>
+         </div>
+       </div>
+
+       {/* Cleaning info */}
+       {totalCleaning > 0 && (
+         <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-center gap-2 text-sm text-gray-500">
+           <span>Cleaning fees collected from guests:</span>
+           <span className="font-semibold text-gray-700">€{Math.round(totalCleaning).toLocaleString()}</span>
+           <span className="text-xs">(included in revenue)</span>
+         </div>
+       )}
+     </CardContent>
+   </Card>
  );
 };
 
