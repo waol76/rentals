@@ -48,6 +48,7 @@ export async function GET() {
           const expenses = {
             commissions: parseValue(rowData['Commissions (Booking, AirBnB)']),
             management: parseValue(rowData['Property Management']),
+            cleaning: parseValue(rowData['Cleaning'] || rowData['cleaning']),
             internet: parseValue(rowData['Internet']),
             electricity: parseValue(rowData['Electricity']),
             water: parseValue(rowData['Water']),

@@ -5,6 +5,7 @@ import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recha
 interface ExpenseCategories {
  commissions: number;
  management: number;
+ cleaning: number;
  internet: number;
  electricity: number;
  water: number;
@@ -32,6 +33,7 @@ const calculateFinancials = () => {
       const expenseCategories: ExpenseCategories = {
         commissions: Math.abs(Number(row.commissions) || 0),
         management: Math.abs(Number(row.management) || 0),
+        cleaning: Math.abs(Number(row.cleaning) || 0),
         internet: Math.abs(Number(row.internet) || 0),
         electricity: Math.abs(Number(row.electricity) || 0),
         water: Math.abs(Number(row.water) || 0),
