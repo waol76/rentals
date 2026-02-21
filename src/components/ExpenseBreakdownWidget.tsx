@@ -21,7 +21,7 @@ interface SliceEntry {
 const EXPENSE_COLORS: Record<string, string> = {
   'Net Income': '#22c55e',
   'Commissions': '#ef4444',
-  'Management': '#f97316',
+  'Mgmt + Cleaning': '#f97316',
   'Internet': '#3b82f6',
   'Electricity': '#eab308',
   'Water': '#8b5cf6',
@@ -74,16 +74,25 @@ const calculateFinancials = () => {
 
  const { expenses, totalExpenses, netIncome, totalCleaning } = calculateFinancials();
 
+ // Label mapping: management includes cleaning pass-through
+ const labelMap: Record<string, string> = {
+   management: 'Mgmt + Cleaning',
+ };
+ const getLabel = (key: string) => labelMap[key] || key.charAt(0).toUpperCase() + key.slice(1);
+
  // Single pie: net income + each expense category against total revenue
  const revenueBreakdown: SliceEntry[] = [
    { name: 'Net Income', value: netIncome, color: EXPENSE_COLORS['Net Income'] },
    ...Object.entries(expenses)
      .filter(([key]) => !['grossIncome', 'netIncome', 'cleaning'].includes(key))
-     .map(([name, value]) => ({
-       name: name.charAt(0).toUpperCase() + name.slice(1),
-       value: value as number,
-       color: EXPENSE_COLORS[name.charAt(0).toUpperCase() + name.slice(1)] || '#94a3b8',
-     }))
+     .map(([key, value]) => {
+       const label = getLabel(key);
+       return {
+         name: label,
+         value: value as number,
+         color: EXPENSE_COLORS[label] || '#94a3b8',
+       };
+     })
      .filter(item => item.value > 0),
  ];
 
@@ -202,9 +211,9 @@ const calculateFinancials = () => {
        {/* Cleaning info */}
        {totalCleaning > 0 && (
          <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-center gap-2 text-sm text-gray-500">
-           <span>Cleaning fees collected from guests:</span>
+           <span>Cleaning pass-through:</span>
            <span className="font-semibold text-gray-700">€{Math.round(totalCleaning).toLocaleString()}</span>
-           <span className="text-xs">(included in revenue)</span>
+           <span className="text-xs">(collected from guests, paid to management — included in both revenue &amp; expenses)</span>
          </div>
        )}
      </CardContent>

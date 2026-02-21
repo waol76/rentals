@@ -52,9 +52,15 @@ export async function GET() {
           const cleaning = parseValue(rowData['Cleaning'] || rowData['cleaning']);
           const gross = grossFromSheet + cleaning;
 
+          // Management fee from the sheet (already negative)
+          const managementFromSheet = parseValue(rowData['Property Management']);
+          // Cleaning is a pass-through: collected from guest, paid to property manager.
+          // Include it in management expense so it cancels out against the revenue side.
+          const management = managementFromSheet - cleaning; // more negative = larger expense
+
           const expenses = {
             commissions: parseValue(rowData['Commissions (Booking, AirBnB)']),
-            management: parseValue(rowData['Property Management']),
+            management,
             internet: parseValue(rowData['Internet']),
             electricity: parseValue(rowData['Electricity']),
             water: parseValue(rowData['Water']),
@@ -62,7 +68,6 @@ export async function GET() {
             extra: parseValue(rowData['Extra']),
           };
 
-          // Calculate total expenses (cleaning is not an expense — it's guest-paid revenue)
           const totalExpenses = Object.values(expenses)
             .filter((val) => !isNaN(val))
             .reduce((sum, val) => sum + val, 0);
@@ -72,8 +77,8 @@ export async function GET() {
             year: rowData['Year']?.trim(),
             nights: parseInt(rowData['Nights']) || 0,
             gross,
-            net: gross + totalExpenses, // expenses are already negative
-            cleaning, // tracked for display (already included in gross)
+            net: gross + totalExpenses, // expenses already negative; cleaning cancels out
+            cleaning, // tracked for display (already in gross and in management)
             ...expenses,
           };
         } catch (err) {
