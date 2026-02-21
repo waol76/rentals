@@ -28,9 +28,12 @@ const calculateFinancials = () => {
     (acc, row) => {
       if (!row) return acc;
 
-      const grossIncome = Math.abs(Number(row.gross) || 0);
+      const grossIncome = Number(row.gross) || 0;
+      // Use row.net from the API (single source of truth, consistent with KPIs)
+      const netValue = Number(row.net) || 0;
       // Cleaning is paid by guests — tracked separately, not an expense
       const cleaningAmount = Math.abs(Number(row.cleaning) || 0);
+      // Individual expenses for the breakdown pie chart
       const expenseCategories: ExpenseCategories = {
         commissions: Math.abs(Number(row.commissions) || 0),
         management: Math.abs(Number(row.management) || 0),
@@ -43,6 +46,7 @@ const calculateFinancials = () => {
 
       return {
         grossIncome: acc.grossIncome + grossIncome,
+        netIncome: acc.netIncome + netValue,
         cleaning: acc.cleaning + cleaningAmount,
         ...Object.keys(expenseCategories).reduce((expAcc, key) => ({
           ...expAcc,
@@ -50,19 +54,16 @@ const calculateFinancials = () => {
         }), {})
       };
     },
-    { grossIncome: 0, cleaning: 0 }
+    { grossIncome: 0, netIncome: 0, cleaning: 0 }
   );
 
-  const totalExpenses = Object.entries(result)
-    .filter(([key]) => key !== 'grossIncome' && key !== 'cleaning')
-    .reduce((sum, [, value]) => sum + (value as number), 0);
-
-  const netIncome = result.grossIncome - totalExpenses;
+  // Total expenses derived from gross - net (consistent with API calculation)
+  const totalExpenses = result.grossIncome - result.netIncome;
 
   return {
     expenses: result,
     totalExpenses,
-    netIncome,
+    netIncome: result.netIncome,
     totalCleaning: result.cleaning
   };
 };
