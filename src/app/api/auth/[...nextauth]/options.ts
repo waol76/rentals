@@ -1,14 +1,8 @@
 import type { NextAuthOptions } from 'next-auth'
 import Google from 'next-auth/providers/google'
 
-// List of allowed email addresses
-const allowedEmails = [
-  'waol76@gmail.com',
-  'catua81@gmail.com',
-  'leonardoberti011@gmail.com',
-  'bertimario17@gmail.com',
-  // Add more authorized emails as needed
-];
+// List of allowed email addresses (from environment variable)
+const allowedEmails = (process.env.ALLOWED_EMAILS || '').split(',').map(e => e.trim()).filter(Boolean);
 
 export const options: NextAuthOptions = {
   providers: [
